@@ -21,8 +21,12 @@
         <CommandBar Grid.Row="0" HorizontalAlignment="Center" Loaded="CommandBar_Loaded">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" Label="Add Action" Click="AddButton_Click"/>
-                <AppBarButton Icon="Remove" Label="Remove Action" Click="RemoveButton_Click"/>
-                <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="Refresh data" Click="RefreshButton_Click">
+                <AppBarButton Icon="Remove" Label="Remove Action" Click="RemoveButton_Click">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Delete"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                    <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="Refresh data" Click="RefreshButton_Click">
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator 
                             Key="F5" />
@@ -46,10 +50,12 @@
             </CommandBar.PrimaryCommands>
         </CommandBar>
 
-        <ListView x:Name="RegistryKeys" Grid.Row="3" Grid.Column="0" Margin="0, 8, 8, 32" SelectionMode="Single">
+        <ListView x:Name="RegistryKeys" Grid.Row="3" Grid.Column="0"  Margin="0, 8, 8, 32" 
+                  SelectionMode="Single"
+                  SelectionChanged="RegistryKeys_OnSelectionChanged">
             
         </ListView>
-        <ScrollViewer Grid.Row="3" Grid.Column="1" Background="#1c1c1c" Margin="8, 8, 8, 32">
+        <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="8, 8, 8, 32">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -62,19 +68,20 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0"
-                    Margin="8,8,8,4" Style="{ThemeResource BaseTextBlockStyle}">Edit params</TextBlock>
+                    Margin="0,8,8,4" Style="{ThemeResource BaseTextBlockStyle}">Edit params</TextBlock>
                 <TextBox x:Name="TitleBox"
                     Grid.Column="0" Grid.Row="1"
-                    Header="Title" Margin="8"
+                    Header="Title" Margin="0,8,8,4"
 	                HorizontalAlignment="Stretch" />
-                <TextBox Grid.Column="0" Grid.Row="2"
-                    Header="Command" Margin="8"
+                <TextBox x:Name="CommandBox"
+                    Grid.Column="0" Grid.Row="2"
+                    Header="Command" Margin="0,8,8,4"
 	                HorizontalAlignment="Stretch" />
                 <TextBox Grid.Column="0" Grid.Row="3"
-                    Header="Params" Margin="8"
+                    Header="Params" Margin="0,8,8,4"
 	                HorizontalAlignment="Stretch" />
                 <TextBox Grid.Column="0" Grid.Row="4"
-                    Header="Icon" Margin="8"
+                    Header="Icon" Margin="0,8,8,4"
 	                HorizontalAlignment="Stretch" />
             </Grid>
         </ScrollViewer>

@@ -10,9 +10,12 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -27,42 +30,55 @@ namespace ContextMenuEditorForWindows.Views
     /// </summary>
     public sealed partial class DirBackground : Page
     {
-        public DirBackground()
-        {
-            this.InitializeComponent();
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\Classes\Directory\Background\shell", true);
+        public ObservableCollection<string> tabsData { get; } = new();
+        private List<string> tabs = new List<string>();
+            public DirBackground()
+            {
+                this.InitializeComponent();
+
+            RegistryKey rk = Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("Background", true);
             if (rk != null)
             {
                 foreach (string key in rk.GetSubKeyNames())
                 {
-                    RegistryKeysBgDir.Items.Add(key);
+                    tabs.Add(key);
+                    //RegistryKeysBgDir.Items.Add(key);
                 }
             }
+
         }
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RegistryKeysBgDir.SelectedIndex != -1)
-            {
-                RegistryKeysBgDir.Items.RemoveAt(RegistryKeysBgDir.SelectedIndex);
-            }
-            //ContentDialog dialog = new ContentDialog();
-
-            //// XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-            //dialog.XamlRoot = this.XamlRoot;
-            //dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            //dialog.Title = "Any editing";
-            //dialog.PrimaryButtonText = "Save";
-            //dialog.SecondaryButtonText = "Don't Save";
-            //dialog.CloseButtonText = "Cancel";
-            //dialog.DefaultButton = ContentDialogButton.Primary;
-            //var res = await dialog.ShowAsync();
-            //RegistryKeys.Items.Add(res.ToString());
+            //if (RegistryKeysBgDir.SelectedIndex != -1)
+            //{
+            //    RegistryKeysBgDir.Items.RemoveAt(RegistryKeysBgDir.SelectedIndex);
+            //}
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            int n = RegistryKeysBgDir.Items.Count;
-            RegistryKeysBgDir.Items.Add(n++);
+            //int n = RegistryKeysBgDir.Items.Count;
+            //RegistryKeysBgDir.Items.Add(n++);
+        }
+
+        private void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        
+
+        private void TabViewNav_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                TabViewItem newItem = new TabViewItem();
+                newItem.Header = $"{tabs[i]}";
+                newItem.IsClosable = false;
+                Frame frame = new Frame();
+                frame.Navigate(typeof(AnyFileMenu));
+                newItem.Content = frame;
+                (sender as TabView).TabItems.Add(newItem);
+            }
         }
     }
 }

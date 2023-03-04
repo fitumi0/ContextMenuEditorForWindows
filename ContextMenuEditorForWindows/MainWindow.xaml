@@ -5,25 +5,25 @@
 	x:Class="ContextMenuEditorForWindows.MainWindow"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:local="using:ContextMenuEditorForWindows"
+    xmlns:local="using:ContextMenuEditorForWindows"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
-	<Grid x:Name="Grid">
+    <Grid x:Name="Grid">
 		 <!--title bar-->
 		<Grid.RowDefinitions>   
 			<RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
 
 		</Grid.RowDefinitions>
-        <Grid x:Name="AppTitleBar"  
-      Height="32">
+        <Grid x:Name="AppTitleBar" 
+              Height="32">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
                 <ColumnDefinition/>
                 <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
             </Grid.ColumnDefinitions>
-            <Image x:Name="TitleBarIcon" Source="/Assets/Logo.png"
+            <Image x:Name="TitleBarIcon" Source="/Assets/EditMenu.png"
            Grid.Column="1"
            HorizontalAlignment="Left"
            Width="16" Height="16"
@@ -34,13 +34,17 @@
                Grid.Column="1"
                VerticalAlignment="Center"
                Margin="28,0,0,0"/>
+            
         </Grid>
+
         <NavigationView x:Name="NavView"  
-						Header="Header Text" 
+                        Background="#202020"
 						PaneDisplayMode="Top"
+                        
                         ItemInvoked="NavView_ItemInvoked"
                         Grid.Row="1"
 						IsSettingsVisible="True">
+            
             <!--Add icons -->
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="AnyFile" Icon="Document" Content="Any File Edit" Tag="ContextMenuEditorForWindows.Views.AnyFileMenu" />

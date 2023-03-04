@@ -23,7 +23,7 @@ namespace ContextMenuEditorForWindows.Views
 {
     public sealed partial class AnyFileMenu : Page
     {
-        private readonly RegistryKey _rkClassRoot = Registry.ClassesRoot.OpenSubKey(@"*\shell", true);
+        private readonly RegistryKey _rkClassRoot = Registry.ClassesRoot.OpenSubKey("*", true).OpenSubKey("shell", true);
 
         public AnyFileMenu()
         {
@@ -36,34 +36,37 @@ namespace ContextMenuEditorForWindows.Views
             }
         }
 
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        private async void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RegistryKeys.SelectedIndex != -1)
+            if (RegistryKeys.SelectedItem.ToString() == "removeproperties" ||
+                RegistryKeys.SelectedItem.ToString() == "UpdateEncryptionSettingsWork")
+            {
+                ContentDialog dialog = new ContentDialog();
+
+                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+                dialog.XamlRoot = this.XamlRoot;
+                dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+                dialog.Title = "Access denied!";
+                dialog.PrimaryButtonText = "Ok";
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                await dialog.ShowAsync();
+            }
+            else if (RegistryKeys.SelectedIndex != -1)
             {
                 RegistryKeys.Items.RemoveAt(RegistryKeys.SelectedIndex);
             }
-            //ContentDialog dialog = new ContentDialog();
-
-            //// XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-            //dialog.XamlRoot = this.XamlRoot;
-            //dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            //dialog.Title = "Any editing";
-            //dialog.PrimaryButtonText = "Save";
-            //dialog.SecondaryButtonText = "Don't Save";
-            //dialog.CloseButtonText = "Cancel";
-            //dialog.DefaultButton = ContentDialogButton.Primary;
-            //var res = await dialog.ShowAsync();
-            //RegistryKeys.Items.Add(res.ToString());
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            _rkClassRoot.CreateSubKey(TitleBox.Text, true, RegistryOptions.None).CreateSubKey("command", true);
-            RegistryKeys.Items.Clear();
-            foreach (var key in _rkClassRoot.GetSubKeyNames())
-            {
-                RegistryKeys.Items.Add(key);
-            }
+            //_rkClassRoot.CreateSubKey(TitleBox.Text, true, RegistryOptions.None).CreateSubKey("command", true);
+            //RegistryKeys.Items.Clear();
+            //foreach (var key in _rkClassRoot.GetSubKeyNames())
+            //{
+            //    RegistryKeys.Items.Add(key);
+            //}
+            int n = RegistryKeys.Items.Count;
+            RegistryKeys.Items.Add(n++);
         }
 
         private void SaveButton_Click(Object sender, RoutedEventArgs e)
@@ -83,6 +86,15 @@ namespace ContextMenuEditorForWindows.Views
         private void CommandBar_Loaded(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void RegistryKeys_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // fill right panel fields 
+            TitleBox.Text = RegistryKeys.SelectedItem.ToString();
+            // open sub key "command" from registry with be able to edit it
+            var registryData = "null";
+            //CommandBox.Text = registryData;
         }
     }
 }
