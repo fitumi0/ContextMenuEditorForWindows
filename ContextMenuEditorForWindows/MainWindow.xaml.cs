@@ -48,7 +48,7 @@ namespace ContextMenuEditorForWindows
             NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().First();
             // change to welcome page (which can open from top menu later)
             ContentFrame.Navigate(
-                       typeof(AnyFileMenu),
+                       typeof(FileConMenu),
                        null,
                        new Microsoft.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo()
                        );

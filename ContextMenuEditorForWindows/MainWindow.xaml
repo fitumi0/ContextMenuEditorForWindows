@@ -47,9 +47,9 @@
             
             <!--Add icons -->
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Name="AnyFile" Icon="Document" Content="Any File Edit" Tag="ContextMenuEditorForWindows.Views.AnyFileMenu" />
-                <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirBackground" />
-                <NavigationViewItem x:Name="Directory" Icon="MoveToFolder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirMenu" />
+                <NavigationViewItem x:Name="FileConMenu" Icon="Document" Content="Any File Edit" Tag="ContextMenuEditorForWindows.Views.FileConMenu" />
+                <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirectoryBackgroundConMenu" />
+                <NavigationViewItem x:Name="Directory" Icon="MoveToFolder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>

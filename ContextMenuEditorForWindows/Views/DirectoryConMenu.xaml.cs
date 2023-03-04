@@ -25,9 +25,9 @@ namespace ContextMenuEditorForWindows.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DirectoryMenu : Page
+    public sealed partial class DirectoryConMenu : Page
     {
-        public DirectoryMenu()
+        public DirectoryConMenu()
         {
             this.InitializeComponent();
             RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\Classes\Directory\shell", true);

@@ -75,7 +75,7 @@ namespace ContextMenuEditorForWindows.Views
                 newItem.Header = $"{tabs[i]}";
                 newItem.IsClosable = false;
                 Frame frame = new Frame();
-                frame.Navigate(typeof(AnyFileMenu));
+                frame.Navigate(typeof(FileConMenu));
                 newItem.Content = frame;
                 (sender as TabView).TabItems.Add(newItem);
             }
