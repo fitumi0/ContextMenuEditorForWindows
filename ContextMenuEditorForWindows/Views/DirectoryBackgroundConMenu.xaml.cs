@@ -32,7 +32,7 @@ namespace ContextMenuEditorForWindows.Views
     {
         public ObservableCollection<string> tabsData { get; } = new();
         private List<string> tabs = new List<string>();
-            public DirBackground()
+            public DirectoryBackgroundConMenu()
             {
                 this.InitializeComponent();
 
