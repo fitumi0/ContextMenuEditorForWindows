@@ -21,11 +21,11 @@ using Windows.Foundation.Metadata;
 
 namespace ContextMenuEditorForWindows.Views
 {
-    public sealed partial class AnyFileMenu : Page
+    public sealed partial class FileConMenu : Page
     {
         private readonly RegistryKey _rkClassRoot = Registry.ClassesRoot.OpenSubKey("*", true).OpenSubKey("shell", true);
 
-        public AnyFileMenu()
+        public FileConMenu()
         {
             this.InitializeComponent();
             //RegistryKey rk = Registry.ClassesRoot.OpenSubKey(@"*\shell", true);

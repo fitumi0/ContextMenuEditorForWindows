@@ -28,7 +28,7 @@ namespace ContextMenuEditorForWindows.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DirBackground : Page
+    public sealed partial class DirectoryBackgroundConMenu : Page
     {
         public ObservableCollection<string> tabsData { get; } = new();
         private List<string> tabs = new List<string>();
