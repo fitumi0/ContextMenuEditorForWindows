@@ -13,6 +13,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <PackageIcon>EditMenu.png</PackageIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Views\_DirectoryBackgroundShell.xaml" />
+    <None Remove="Views\_DirectoryBackgroundShellEx.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221109.1" />
@@ -40,5 +44,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\_DirectoryBackgroundShellEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\_DirectoryBackgroundShell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

@@ -30,42 +30,19 @@ namespace ContextMenuEditorForWindows.Views
     /// </summary>
     public sealed partial class DirectoryBackgroundConMenu : Page
     {
-        public ObservableCollection<string> tabsData { get; } = new();
         private List<string> tabs = new List<string>();
             public DirectoryBackgroundConMenu()
             {
                 this.InitializeComponent();
-
-            RegistryKey rk = Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("Background", true);
-            if (rk != null)
-            {
-                foreach (string key in rk.GetSubKeyNames())
+                RegistryKey rk = Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("Background", true);
+                if (rk != null)
                 {
-                    tabs.Add(key);
-                    //RegistryKeysBgDir.Items.Add(key);
-                }
+                    foreach (string key in rk.GetSubKeyNames())
+                    {
+                        tabs.Add(key);
+                    }
             }
-
-        }
-        private void RemoveButton_Click(object sender, RoutedEventArgs e)
-        {
-            //if (RegistryKeysBgDir.SelectedIndex != -1)
-            //{
-            //    RegistryKeysBgDir.Items.RemoveAt(RegistryKeysBgDir.SelectedIndex);
-            //}
-        }
-
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            //int n = RegistryKeysBgDir.Items.Count;
-            //RegistryKeysBgDir.Items.Add(n++);
-        }
-
-        private void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
-        
+        }       
 
         private void TabViewNav_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -75,8 +52,20 @@ namespace ContextMenuEditorForWindows.Views
                 newItem.Header = $"{tabs[i]}";
                 newItem.IsClosable = false;
                 Frame frame = new Frame();
-                frame.Navigate(typeof(FileConMenu));
+                switch (i){
+                    case 0:
+                        {
+                            frame.Navigate(typeof(_DirectoryBackgroundShell));
+                            break;
+                        }
+                    case 1:
+                        {
+                            frame.Navigate(typeof(_DirectoryBackgroundShellEx));
+                            break;
+                        }
+                }
                 newItem.Content = frame;
+                newItem.IconSource = new SymbolIconSource() { Symbol = Symbol.Document };
                 (sender as TabView).TabItems.Add(newItem);
             }
         }

@@ -14,8 +14,6 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <CommandBar Grid.Row="0" HorizontalAlignment="Center" Loaded="CommandBar_Loaded">
@@ -50,12 +48,12 @@
             </CommandBar.PrimaryCommands>
         </CommandBar>
 
-        <ListView x:Name="RegistryKeys" Grid.Row="3" Grid.Column="0"  Margin="0, 8, 8, 32" 
+        <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0"  Margin="0, 8, 8, 32" 
                   SelectionMode="Single"
                   SelectionChanged="RegistryKeys_OnSelectionChanged">
             
         </ListView>
-        <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="8, 8, 8, 32">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="8, 8, 8, 32">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

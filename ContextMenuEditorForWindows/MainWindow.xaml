@@ -9,13 +9,15 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
-    <Grid x:Name="Grid">
-		 <!--title bar-->
+    <Grid x:Name="Grid"
+          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		 
 		<Grid.RowDefinitions>   
 			<RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
 
 		</Grid.RowDefinitions>
+
         <Grid x:Name="AppTitleBar" 
               Height="32">
             <Grid.ColumnDefinitions>
@@ -24,32 +26,29 @@
                 <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="TitleBarIcon" Source="/Assets/EditMenu.png"
-           Grid.Column="1"
-           HorizontalAlignment="Left"
-           Width="16" Height="16"
-           Margin="8,0,0,0"/>
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Width="16" Height="16"
+                   Margin="8,0,0,0"/>
             <TextBlock x:Name="TitleTextBlock" 
                Text="{x:Bind Title}" 
                Style="{StaticResource CaptionTextBlockStyle}"
                Grid.Column="1"
                VerticalAlignment="Center"
                Margin="28,0,0,0"/>
-            
         </Grid>
 
-        <NavigationView x:Name="NavView"  
-                        Background="#202020"
-						PaneDisplayMode="Top"
-                        
+        <NavigationView x:Name="NavView"
+                        PaneDisplayMode="Top"
                         ItemInvoked="NavView_ItemInvoked"
                         Grid.Row="1"
 						IsSettingsVisible="True">
             
             <!--Add icons -->
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Name="FileConMenu" Icon="Document" Content="Any File Edit" Tag="ContextMenuEditorForWindows.Views.FileConMenu" />
+                <NavigationViewItem x:Name="FileConMenu" Icon="Page" Content="File" Tag="ContextMenuEditorForWindows.Views.FileConMenu" />
+                <NavigationViewItem x:Name="Directory" Icon="Folder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
                 <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirectoryBackgroundConMenu" />
-                <NavigationViewItem x:Name="Directory" Icon="MoveToFolder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
