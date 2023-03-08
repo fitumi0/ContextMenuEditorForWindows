@@ -44,7 +44,6 @@ public sealed partial class MainWindow : Window
         Title = "Context Menu Editor v0.1 for Windows " + OS.ToString();
         this.InitializeComponent();
         ExtendsContentIntoTitleBar = true;
-        
         SetTitleBar(AppTitleBar);
         
         NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().First();

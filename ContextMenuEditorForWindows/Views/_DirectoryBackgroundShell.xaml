@@ -17,22 +17,29 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
-        <CommandBar Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
+        <CommandBar Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" Label="Add Action" Click="AddButton_Click"/>
                 <AppBarButton Icon="Remove" Label="Remove Action" Click="RemoveButton_Click"/>
+                <AppBarButton Icon="FullScreen" Label="Expand All" Click="ExpandButton_Click"/>
+                <AppBarButton Icon="BackToWindow" Label="Collapse all" IsEnabled="False"/>
                 <AppBarSeparator />
             </CommandBar.PrimaryCommands>
         </CommandBar>
 
-        <ListView x:Name="RegistryKeys" Grid.Row="3" Grid.Column="0" Margin="0, 8, 8, 32" SelectionMode="Single">
-
-        </ListView>
-        <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="8, 8, 8, 32">
+        <!--<ListView x:Name="RegistryKeys" Grid.Row="3" Grid.Column="0" Margin="0, 8, 8, 32" SelectionMode="Single">
+        </ListView>-->
+        <TreeView 
+            x:Name="RegistryKeys" 
+            Grid.Row="1"
+            CanDrag="False" 
+            CanDragItems="False"
+            AllowDrop="False"
+            Tapped="RegistryKeys_Tapped"
+            ></TreeView>
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -47,7 +54,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0"
                     Margin="8,8,8,4" Style="{ThemeResource BaseTextBlockStyle}">Edit params</TextBlock>
-                <TextBox Grid.Column="0" Grid.Row="1"
+                <TextBox x:Name="TitleBox"
+                    Grid.Column="0" Grid.Row="1"
                     Header="Title" Margin="8"
 	                HorizontalAlignment="Stretch" />
                 <TextBox Grid.Column="0" Grid.Row="2"

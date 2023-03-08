@@ -18,25 +18,22 @@
 
 		</Grid.RowDefinitions>
 
-        <Grid x:Name="AppTitleBar" 
+        <Border x:Name="AppTitleBar"
               Height="32">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
-                <ColumnDefinition/>
-                <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
-            </Grid.ColumnDefinitions>
-            <Image x:Name="TitleBarIcon" Source="/Assets/EditMenu.png"
-                   Grid.Column="1"
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
+                Background="{StaticResource AppCommonBackground}">
+                <Image x:Name="TitleBarIcon" Source="/Assets/EditMenu.png"
                    HorizontalAlignment="Left"
                    Width="16" Height="16"
                    Margin="8,0,0,0"/>
-            <TextBlock x:Name="TitleTextBlock" 
+                <TextBlock x:Name="TitleTextBlock" 
                Text="{x:Bind Title}" 
                Style="{StaticResource CaptionTextBlockStyle}"
-               Grid.Column="1"
+               TextWrapping="NoWrap"
                VerticalAlignment="Center"
-               Margin="28,0,0,0"/>
-        </Grid>
+               Margin="12,0,0,0"/>
+            </StackPanel>
+        </Border>
 
         <NavigationView x:Name="NavView"
                         PaneDisplayMode="Top"

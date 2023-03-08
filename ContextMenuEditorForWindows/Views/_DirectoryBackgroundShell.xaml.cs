@@ -35,14 +35,27 @@ namespace ContextMenuEditorForWindows.Views
             {
                 foreach (string key in rk.GetSubKeyNames())
                 {
-                    RegistryKeys.Items.Add(key);
+                    // todo: recursion get all child nodes for every key and build treeview
+                    TreeViewNode rootNode = getAllSubNodes(rk.OpenSubKey(key));
+                    RegistryKeys.RootNodes.Add(rootNode);
                 }
             }
+
         }
 
+        private TreeViewNode getAllSubNodes(RegistryKey rk)
+        {
+            TreeViewNode rootNode = new TreeViewNode() { Content = rk.ToString().Split(@"\").Last() };
+            string[] names = rk.GetSubKeyNames();
+            foreach (string name in names)
+            {
+                rootNode.Children.Add(getAllSubNodes(rk.OpenSubKey(name)));
+            }
+            return rootNode;
+        }
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -53,6 +66,32 @@ namespace ContextMenuEditorForWindows.Views
         private void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RegistryKeys_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (RegistryKeys.SelectedItem != null)
+            {
+                TitleBox.Text = RegistryKeys.SelectedNode.Content.ToString();
+            }
+        }
+
+        private void ExpandButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var key in RegistryKeys.RootNodes)
+            {
+                RegistryKeys.Expand(key);
+                ExpandTree(key);
+            }
+        }
+
+        private void ExpandTree(TreeViewNode rootNode)
+        {
+            foreach (var child in rootNode.Children)
+            {
+                child.IsExpanded = true;
+                ExpandTree(child);
+            }
         }
     }
 }

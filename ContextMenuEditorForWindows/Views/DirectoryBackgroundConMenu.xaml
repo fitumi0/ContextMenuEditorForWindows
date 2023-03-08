@@ -16,6 +16,7 @@
         <TabView 
             x:Name="TabViewNav"
             CloseButtonOverlayMode="OnPointerOver" TabWidthMode="Equal"
-            IsAddTabButtonVisible="False" Loaded="TabViewNav_OnLoaded"/>
+            IsAddTabButtonVisible="False" Loaded="TabViewNav_OnLoaded"
+            Margin="0, 0, 0, 16"/>
     </Grid>
 </Page>

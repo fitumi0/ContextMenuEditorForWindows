@@ -30,10 +30,17 @@
         <!--<ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Margin="0, 8, 8, 32" SelectionMode="Single">
 
         </ListView>-->
-        <TreeView x:Name="RegistryKeys" Grid.Row="1"></TreeView>
+        <TreeView 
+            x:Name="RegistryKeys" 
+            Grid.Row="1"
+            CanDrag="False" 
+            CanDragItems="False"
+            AllowDrop="False"
+            Tapped="RegistryKeys_Tapped"
+            ></TreeView>
 
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="8, 8, 8, 32">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -48,7 +55,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0"
                     Margin="8,8,8,4" Style="{ThemeResource BaseTextBlockStyle}">Edit params</TextBlock>
-                <TextBox Grid.Column="0" Grid.Row="1"
+                <TextBox x:Name="TitleBox"
+                    Grid.Column="0" Grid.Row="1"
                     Header="Title" Margin="8"
 	                HorizontalAlignment="Stretch" />
                 <TextBox Grid.Column="0" Grid.Row="2"

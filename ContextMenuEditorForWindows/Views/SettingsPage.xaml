@@ -9,6 +9,5 @@
 
     <StackPanel>
         <TextBlock>Settings Page</TextBlock>
-
     </StackPanel>
 </Page>
