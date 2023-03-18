@@ -40,6 +40,11 @@ public sealed partial class MainWindow : Window
 {
     public MainWindow()
     {
+        IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+        var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+        var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+
+        appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 480, Height = 800 });
         var OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
         Title = "Context Menu Editor v0.1 for Windows " + OS.ToString();
         this.InitializeComponent();
@@ -51,7 +56,7 @@ public sealed partial class MainWindow : Window
         ContentFrame.Navigate(
                    typeof(FileConMenu),
                    null,
-                   new Microsoft.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo()
+                   new DrillInNavigationTransitionInfo()
                    );
 
 
@@ -62,7 +67,7 @@ public sealed partial class MainWindow : Window
     {
         FrameNavigationOptions navOptions = new FrameNavigationOptions
         {
-            TransitionInfoOverride = args.RecommendedNavigationTransitionInfo
+            TransitionInfoOverride = new DrillInNavigationTransitionInfo()
         };
         if (sender.PaneDisplayMode == NavigationViewPaneDisplayMode.Top)
         {
