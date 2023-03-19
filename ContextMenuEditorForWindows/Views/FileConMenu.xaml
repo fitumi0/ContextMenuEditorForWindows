@@ -66,7 +66,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewItemTemplate">
                     <StackPanel Orientation="Horizontal" Height="64" Padding="12">
-                        <ToggleSwitch Toggled="ToggleSwitch_Toggled"></ToggleSwitch>
+                        <ToggleSwitch Toggled="ToggleSwitch_Toggled" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
                         <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" Margin="12,0,0,0"/>
                     </StackPanel>
                 </DataTemplate>

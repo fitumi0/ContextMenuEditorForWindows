@@ -67,20 +67,20 @@ namespace ContextMenuEditorForWindows.Views
                 NativeMethods.FreeLibrary(handle);
                 string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
                 // add verification to toggle or untoggle
-                ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString);
+                ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString, _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false);
                 namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
                 RegistryKeys.Items.Add(lv);
             }
             else if (value != null && !value.ToString().Contains(".exe") && !hiddenKeys.Contains(key.ToLower()))
             {
                 string enchancedString = _rkClassRoot.OpenSubKey(key).GetValue("").ToString().Replace("&", "");
-                ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString);
+                ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString, _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false);
                 namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
                 RegistryKeys.Items.Add(lv);
             }
             else if (!hiddenKeys.Contains(key.ToLower()))
             {
-                ListViewItemTemplate lv = new ListViewItemTemplate(key.GetHashCode().ToString(), key);
+                ListViewItemTemplate lv = new ListViewItemTemplate(key.GetHashCode().ToString(), key, _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false);
                 namePaths.Add(key, _rkClassRoot.OpenSubKey(key).ToString() );
                 RegistryKeys.Items.Add(lv);
             }

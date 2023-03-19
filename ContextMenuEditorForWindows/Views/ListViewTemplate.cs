@@ -16,11 +16,16 @@ public class ListViewItemTemplate
     {
         get; set;
     }
+    public string SwitchIsOn
+    {
+        get; set;
+    }
     // add toggle state
-    public ListViewItemTemplate(string toggle, string lvitem)
+    public ListViewItemTemplate(string toggle, string lvitem, bool switchIsOn)
     {
         Toggle = toggle;
         Text = lvitem;
+        SwitchIsOn = switchIsOn ? "True" : "False";
     }
 
 }
