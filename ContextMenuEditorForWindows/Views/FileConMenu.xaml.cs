@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
-
 using ContextMenuEditorForWindows.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -21,6 +20,8 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
 
+#pragma warning disable IDE0007 // disable warnings "use var instead explict type". wth c# become like js?
+
 namespace ContextMenuEditorForWindows.Views
 {
     public sealed partial class FileConMenu : Page
@@ -28,7 +29,6 @@ namespace ContextMenuEditorForWindows.Views
         private readonly RegistryKey _rkClassRoot = Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("Background", true).OpenSubKey("shell", true);
         
         private Dictionary<string, string> namePaths = new Dictionary<string, string>();
-        // add to hiddenKeys some keys which contains string parameter "legacydisable"
         private readonly string[] hiddenKeys = {
             "removeproperties",
             "explore",
@@ -44,7 +44,7 @@ namespace ContextMenuEditorForWindows.Views
         public FileConMenu()
         {
             this.InitializeComponent();
-            //RegistryKey rk = Registry.ClassesRoot.OpenSubKey(@"*\shell", true);
+
             if (_rkClassRoot == null) return;
             foreach (var key in _rkClassRoot.GetSubKeyNames())
             {
@@ -58,29 +58,53 @@ namespace ContextMenuEditorForWindows.Views
 
         private void addItem(object value, string key)
         {
+            bool isEnable = _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false;
             if (value != null && value.ToString().Contains(".dll") && !hiddenKeys.Contains(key.ToLower()))
             {
                 string path = value.ToString().Split(",")[0];
+
                 IntPtr handle = NativeMethods.LoadLibrary(path.Replace("@", ""));
                 StringBuilder sb = new StringBuilder(255);
-                NativeMethods.LoadString(handle, (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())), sb, sb.Capacity + 1);
+                NativeMethods.LoadString
+                    (
+                        handle, 
+                        (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())), 
+                        sb, 
+                        sb.Capacity + 1
+                    );
                 NativeMethods.FreeLibrary(handle);
+
                 string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
-                // add verification to toggle or untoggle
-                ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString, _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false);
+                ListViewItemTemplate lv = new ListViewItemTemplate
+                    (
+                        enchancedString.GetHashCode().ToString(), 
+                        enchancedString,
+                        isEnable
+                    );
+
                 namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
                 RegistryKeys.Items.Add(lv);
             }
             else if (value != null && !value.ToString().Contains(".exe") && !hiddenKeys.Contains(key.ToLower()))
             {
                 string enchancedString = _rkClassRoot.OpenSubKey(key).GetValue("").ToString().Replace("&", "");
-                ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString, _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false);
+                ListViewItemTemplate lv = new ListViewItemTemplate
+                    (
+                        enchancedString.GetHashCode().ToString(), 
+                        enchancedString,
+                        isEnable
+                    );
                 namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
                 RegistryKeys.Items.Add(lv);
             }
             else if (!hiddenKeys.Contains(key.ToLower()))
             {
-                ListViewItemTemplate lv = new ListViewItemTemplate(key.GetHashCode().ToString(), key, _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false);
+                ListViewItemTemplate lv = new ListViewItemTemplate
+                    (
+                        key.GetHashCode().ToString(), 
+                        key,
+                        isEnable
+                    );
                 namePaths.Add(key, _rkClassRoot.OpenSubKey(key).ToString() );
                 RegistryKeys.Items.Add(lv);
             }
@@ -144,20 +168,24 @@ namespace ContextMenuEditorForWindows.Views
 
         private async void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
+            string disableValue = "LegacyDisable";
             ToggleSwitch ts = (sender as ToggleSwitch);
             ContentDialog dialog = new ContentDialog();
-            string key = namePaths[((ts.Parent as StackPanel).Children[1] as TextBlock).Text].Replace(@"HKEY_CLASSES_ROOT\", "");
+            string key = namePaths
+                [
+                    ((ts.Parent as StackPanel).Children[1] as TextBlock).Text
+                ].Replace(@"HKEY_CLASSES_ROOT\", "");
             RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(key, true);
 
             if (ts != null)
             {
                 if (ts.IsOn)
                 {
-                    _rk.DeleteValue("LegacyDisable");
+                    _rk.DeleteValue(disableValue);
                 }
                 else if (!ts.IsOn)
                 {
-                    _rk.SetValue("LegacyDisable", "", RegistryValueKind.String);
+                    _rk.SetValue(disableValue, "", RegistryValueKind.String);
 
                 }
             }
