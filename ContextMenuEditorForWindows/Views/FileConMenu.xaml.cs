@@ -37,7 +37,9 @@ namespace ContextMenuEditorForWindows.Views
             "opennewwindow", 
             "find", 
             "updateencryptionsettings", 
-            "cmd"
+            "cmd",
+            "powershell",
+            "wsl"
         };
         public FileConMenu()
         {
@@ -56,7 +58,7 @@ namespace ContextMenuEditorForWindows.Views
 
         private void addItem(object value, string key)
         {
-            if (value != null && value.ToString().Contains(".dll"))
+            if (value != null && value.ToString().Contains(".dll") && !hiddenKeys.Contains(key.ToLower()))
             {
                 string path = value.ToString().Split(",")[0];
                 IntPtr handle = NativeMethods.LoadLibrary(path.Replace("@", ""));
@@ -64,11 +66,12 @@ namespace ContextMenuEditorForWindows.Views
                 NativeMethods.LoadString(handle, (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())), sb, sb.Capacity + 1);
                 NativeMethods.FreeLibrary(handle);
                 string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
+                // add verification to toggle or untoggle
                 ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString);
                 namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
                 RegistryKeys.Items.Add(lv);
             }
-            else if (value != null && !value.ToString().Contains(".exe"))
+            else if (value != null && !value.ToString().Contains(".exe") && !hiddenKeys.Contains(key.ToLower()))
             {
                 string enchancedString = _rkClassRoot.OpenSubKey(key).GetValue("").ToString().Replace("&", "");
                 ListViewItemTemplate lv = new ListViewItemTemplate(enchancedString.GetHashCode().ToString(), enchancedString);

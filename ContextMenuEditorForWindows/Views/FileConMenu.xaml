@@ -61,7 +61,7 @@
         </CommandBar>-->
 
         <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8, 8, 32" 
-                  SelectionMode="Single"
+                  SelectionMode="None"
                   SelectionChanged="RegistryKeys_OnSelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewItemTemplate">
