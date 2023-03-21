@@ -46,11 +46,9 @@
                 <NavigationViewItem x:Name="FileConMenu" Icon="Page" Content="File" Tag="ContextMenuEditorForWindows.Views.FileConMenu" />
                 <!--<NavigationViewItem x:Name="Directory" Icon="Folder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
                 <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirectoryBackgroundConMenu" />-->
+                <!--<NavigationViewItem x:Name="Disk" Icon="MapDrive" Content="Disc" Tag="" />-->
             </NavigationView.MenuItems>
 
-            <NavigationView.FooterMenuItems>
-                <NavigationViewItem Icon="Bookmarks" Content="Test" Tag="ContextMenuEditorForWindows.Views.TestPage" />
-            </NavigationView.FooterMenuItems>
 
             <Frame x:Name="ContentFrame" Padding="32,8,32, 0">
                 <Frame.ContentTransitions>

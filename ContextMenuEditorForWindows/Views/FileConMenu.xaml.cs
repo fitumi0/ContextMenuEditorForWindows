@@ -1,34 +1,33 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
-using ContextMenuEditorForWindows.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Foundation.Metadata;
+using System.Text.RegularExpressions;
 
 #pragma warning disable IDE0007 // disable warnings "use var instead explict type". wth c# become like js?
+#pragma warning disable IDE0090
+#pragma warning disable IDE0044
 
 namespace ContextMenuEditorForWindows.Views
 {
     public sealed partial class FileConMenu : Page
     {
-        private readonly RegistryKey _rkClassRoot = Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("Background", true).OpenSubKey("shell", true);
-        
+        private static readonly string pattern = @"^\{[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\}$";
+
+        private List<RegistryKey> rkeys = new()
+        {
+            Registry.ClassesRoot.OpenSubKey("*", true).OpenSubKey("shell", true),
+            Registry.ClassesRoot.OpenSubKey("*", true).OpenSubKey("shellex", true).OpenSubKey("ContextMenuHandlers", true)
+        };
+
+
         private Dictionary<string, string> namePaths = new Dictionary<string, string>();
+        // убрать некоторые значения после изучения того, что можно отключать при полных правах доступа
         private readonly string[] hiddenKeys = {
             "removeproperties",
             "explore",
@@ -36,77 +35,82 @@ namespace ContextMenuEditorForWindows.Views
             "opennewprocess",
             "opennewwindow", 
             "find", 
-            "updateencryptionsettings", 
-            "cmd",
-            "powershell",
-            "wsl"
+            "updateencryptionsettings",
+            "updateencryptionsettingswork",
+            "cmd",//отключаемо
+            "powershell",//отключаемо
+            "wsl"//отключаемо
         };
         public FileConMenu()
         {
             this.InitializeComponent();
-
-            if (_rkClassRoot == null) return;
-            foreach (var key in _rkClassRoot.GetSubKeyNames())
+            foreach (RegistryKey rk in rkeys)
             {
+                parseKey(rk);
+            }
+
+        }
+
+        private void parseKey(RegistryKey rk)
+        {
+            if (rk != null)
+            {
+                foreach (var key in rk.GetSubKeyNames())
                 {
-                    var value = _rkClassRoot.OpenSubKey(key).GetValue("");
-                    // добавить проверку на каскадное меню
-                    addItem(value, key);
+                    {
+                        var value = rk.OpenSubKey(key).GetValue("");
+                        addItem(value, key, rk);
+                    }
                 }
             }
         }
 
-        private void addItem(object value, string key)
+        private void addItem(object value, string key, RegistryKey root)
         {
-            bool isEnable = _rkClassRoot.OpenSubKey(key).GetValue("LegacyDisable", false).Equals(false) ? true : false;
-            if (value != null && value.ToString().Contains(".dll") && !hiddenKeys.Contains(key.ToLower()))
-            {
-                string path = value.ToString().Split(",")[0];
+            if (value != null) {
+                Match m = Regex.Match(value.ToString(), pattern, RegexOptions.IgnoreCase);
+                if (m.Success) return;
 
-                IntPtr handle = NativeMethods.LoadLibrary(path.Replace("@", ""));
-                StringBuilder sb = new StringBuilder(255);
-                NativeMethods.LoadString
-                    (
-                        handle, 
-                        (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())), 
-                        sb, 
-                        sb.Capacity + 1
-                    );
-                NativeMethods.FreeLibrary(handle);
+                bool isEnable = !root.OpenSubKey(key).GetValue("LegacyDisable", false).Equals("");
+                if (value.ToString().Contains(".dll") && !hiddenKeys.Contains(key.ToLower()))
+                {
+                    string path = value.ToString().Split(",")[0];
 
-                string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
-                ListViewItemTemplate lv = new ListViewItemTemplate
-                    (
-                        enchancedString.GetHashCode().ToString(), 
-                        enchancedString,
-                        isEnable
-                    );
+                    IntPtr handle = NativeMethods.LoadLibrary(path.Replace("@", ""));
+                    StringBuilder sb = new StringBuilder(255);
+                    NativeMethods.LoadString
+                        (
+                            handle,
+                            (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())),
+                            sb,
+                            sb.Capacity + 1
+                        );
+                    NativeMethods.FreeLibrary(handle);
 
-                namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
-                RegistryKeys.Items.Add(lv);
-            }
-            else if (value != null && !value.ToString().Contains(".exe") && !hiddenKeys.Contains(key.ToLower()))
-            {
-                string enchancedString = _rkClassRoot.OpenSubKey(key).GetValue("").ToString().Replace("&", "");
-                ListViewItemTemplate lv = new ListViewItemTemplate
-                    (
-                        enchancedString.GetHashCode().ToString(), 
-                        enchancedString,
-                        isEnable
-                    );
-                namePaths.Add(enchancedString, _rkClassRoot.OpenSubKey(key).ToString());
-                RegistryKeys.Items.Add(lv);
-            }
-            else if (!hiddenKeys.Contains(key.ToLower()))
-            {
-                ListViewItemTemplate lv = new ListViewItemTemplate
-                    (
-                        key.GetHashCode().ToString(), 
-                        key,
-                        isEnable
-                    );
-                namePaths.Add(key, _rkClassRoot.OpenSubKey(key).ToString() );
-                RegistryKeys.Items.Add(lv);
+                    string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
+                    ListViewItemTemplate lv = new ListViewItemTemplate
+                        (
+                            enchancedString.GetHashCode().ToString(),
+                            enchancedString,
+                            isEnable
+                        );
+
+                    namePaths.Add(enchancedString, root.OpenSubKey(key).ToString());
+                    RegistryKeys.Items.Add(lv);
+                }
+                else if (!value.ToString().Contains(".exe") && !hiddenKeys.Contains(key.ToLower()))
+                {
+
+                    string enchancedString = value.ToString().Replace("&", "");
+                    ListViewItemTemplate lv = new ListViewItemTemplate
+                        (
+                            enchancedString.GetHashCode().ToString(),
+                            enchancedString,
+                            isEnable
+                        );
+                    namePaths.Add(enchancedString, root.OpenSubKey(key).ToString());
+                    RegistryKeys.Items.Add(lv);
+                }
             }
         }
 
@@ -145,14 +149,9 @@ namespace ContextMenuEditorForWindows.Views
         {
             RegistryKeys.Items.Clear();
             namePaths.Clear();
-            if (_rkClassRoot == null) return;
-            foreach (var key in _rkClassRoot.GetSubKeyNames())
+            foreach (RegistryKey rk in rkeys)
             {
-                {
-                    var value = _rkClassRoot.OpenSubKey(key).GetValue("");
-                    // добавить проверку на каскадное меню
-                    addItem(value, key);
-                }
+                parseKey(rk);
             }
         }
 
@@ -171,30 +170,24 @@ namespace ContextMenuEditorForWindows.Views
             string disableValue = "LegacyDisable";
             ToggleSwitch ts = (sender as ToggleSwitch);
             ContentDialog dialog = new ContentDialog();
-            string key = namePaths
-                [
+
+            string key = namePaths[
                     ((ts.Parent as StackPanel).Children[1] as TextBlock).Text
-                ].Replace(@"HKEY_CLASSES_ROOT\", "");
+                ].Replace(@"HKEY_CLASSES_ROOT\", "").Replace(@"\", "\\");
             RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(key, true);
 
             if (ts != null)
             {
-                if (ts.IsOn)
-                {
-                    _rk.DeleteValue(disableValue);
-                }
-                else if (!ts.IsOn)
-                {
-                    _rk.SetValue(disableValue, "", RegistryValueKind.String);
-
-                }
+                if (ts.IsOn) { _rk.DeleteValue(disableValue); }
+                else { _rk.SetValue(disableValue, "", RegistryValueKind.String); }
             }
 
 
-            // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
+
+            //XamlRoot must be set in the case of a ContentDialog running in a Desktop app
             //dialog.XamlRoot = this.XamlRoot;
             //dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            //dialog.Title = _rk.ToString();
+            //dialog.Title = key.ToString();
             //dialog.PrimaryButtonText = "Ok";
             //dialog.DefaultButton = ContentDialogButton.Primary;
             //await dialog.ShowAsync();
