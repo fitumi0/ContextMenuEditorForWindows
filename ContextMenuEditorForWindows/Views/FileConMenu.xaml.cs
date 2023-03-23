@@ -58,60 +58,81 @@ namespace ContextMenuEditorForWindows.Views
                 foreach (var key in rk.GetSubKeyNames())
                 {
                     {
-                        var value = rk.OpenSubKey(key).GetValue("");
-                        addItem(value, key, rk);
+                        addItem(key, rk);
                     }
                 }
             }
         }
 
-        private void addItem(object value, string key, RegistryKey root)
+        private void addItem(string key, RegistryKey root)
         {
-            if (value != null) {
-                Match m = Regex.Match(value.ToString(), pattern, RegexOptions.IgnoreCase);
-                if (m.Success) return;
+            object value = root.OpenSubKey(key).GetValue("");
+            object muiverb = root.OpenSubKey(key).GetValue("MUIVerb");
+            bool isEnable = !root.OpenSubKey(key).GetValue("LegacyDisable", false).Equals("");
 
-                bool isEnable = !root.OpenSubKey(key).GetValue("LegacyDisable", false).Equals("");
-                if (value.ToString().Contains(".dll") && !hiddenKeys.Contains(key.ToLower()))
+            if (!hiddenKeys.Contains(key.ToLower()))
+            {
+                if (value != null)
                 {
-                    string path = value.ToString().Split(",")[0];
+                    Match m = Regex.Match(value.ToString(), pattern, RegexOptions.IgnoreCase);
+                    if (m.Success) return;
 
-                    IntPtr handle = NativeMethods.LoadLibrary(path.Replace("@", ""));
-                    StringBuilder sb = new StringBuilder(255);
-                    NativeMethods.LoadString
-                        (
-                            handle,
-                            (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())),
-                            sb,
-                            sb.Capacity + 1
-                        );
-                    NativeMethods.FreeLibrary(handle);
 
-                    string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
-                    ListViewItemTemplate lv = new ListViewItemTemplate
-                        (
-                            enchancedString.GetHashCode().ToString(),
-                            enchancedString,
-                            isEnable
-                        );
+                    if (value.ToString().Contains(".dll"))
+                    {
+                        string path = value.ToString().Split(",")[0];
 
-                    namePaths.Add(enchancedString, root.OpenSubKey(key).ToString());
-                    RegistryKeys.Items.Add(lv);
+                        IntPtr handle = NativeMethods.LoadLibrary(path.Replace("@", ""));
+                        StringBuilder sb = new StringBuilder(255);
+                        NativeMethods.LoadString
+                            (
+                                handle,
+                                (uint)Math.Abs(Int32.Parse(value.ToString().Split(",").Last())),
+                                sb,
+                                sb.Capacity + 1
+                            );
+                        NativeMethods.FreeLibrary(handle);
+
+                        string enchancedString = sb.ToString().Split(",")[0].Replace("&", "");
+                        ListViewItemTemplate lv = new ListViewItemTemplate
+                            (
+                                enchancedString.GetHashCode().ToString(),
+                                enchancedString,
+                                isEnable
+                            );
+
+                        namePaths.Add(enchancedString, root.OpenSubKey(key).ToString());
+                        RegistryKeys.Items.Add(lv);
+                    }
+                    else if (!value.ToString().Contains(".exe"))
+                    {
+
+                        string enchancedString = value.ToString().Replace("&", "");
+                        ListViewItemTemplate lv = new ListViewItemTemplate
+                            (
+                                enchancedString.GetHashCode().ToString(),
+                                enchancedString,
+                                isEnable
+                            );
+                        namePaths.Add(enchancedString, root.OpenSubKey(key).ToString());
+                        RegistryKeys.Items.Add(lv);
+                    }
+
                 }
-                else if (!value.ToString().Contains(".exe") && !hiddenKeys.Contains(key.ToLower()))
+                if (muiverb != null)
                 {
-
-                    string enchancedString = value.ToString().Replace("&", "");
                     ListViewItemTemplate lv = new ListViewItemTemplate
-                        (
-                            enchancedString.GetHashCode().ToString(),
-                            enchancedString,
-                            isEnable
-                        );
-                    namePaths.Add(enchancedString, root.OpenSubKey(key).ToString());
+                    (
+                        muiverb.GetHashCode().ToString(),
+                        muiverb.ToString(),
+                        isEnable
+                    );
+                    namePaths.Add(muiverb.ToString(), root.OpenSubKey(key).ToString());
                     RegistryKeys.Items.Add(lv);
                 }
             }
+
+
         }
 
         private async void RemoveButton_Click(object sender, RoutedEventArgs e)

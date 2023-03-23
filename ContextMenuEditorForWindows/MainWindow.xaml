@@ -9,6 +9,8 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
+
+
     <Grid x:Name="Grid"
           Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		 
@@ -44,8 +46,8 @@
             <!--Add icons -->
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="FileConMenu" Icon="Page" Content="File" Tag="ContextMenuEditorForWindows.Views.FileConMenu" />
-                <!--<NavigationViewItem x:Name="Directory" Icon="Folder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
-                <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirectoryBackgroundConMenu" />-->
+                <NavigationViewItem x:Name="Directory" Icon="Folder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
+                <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirectoryBackgroundConMenu" />
                 <!--<NavigationViewItem x:Name="Disk" Icon="MapDrive" Content="Disc" Tag="" />-->
             </NavigationView.MenuItems>
 

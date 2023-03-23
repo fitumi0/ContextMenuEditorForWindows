@@ -19,12 +19,7 @@
         
         <CommandBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Loaded="CommandBar_Loaded">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="Add" Label="Add Action" Click="AddButton_Click"/>
-                <AppBarButton Icon="Remove" Label="Remove Action" Click="RemoveButton_Click">
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="Delete"/>
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
+
                     <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="Refresh data" Click="RefreshButton_Click">
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator 
@@ -34,31 +29,7 @@
                 <AppBarSeparator />
             </CommandBar.PrimaryCommands>
 
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Icon="Save" Label="Save action">
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator 
-                            Modifiers="Control" 
-                            Key="S" />
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
-            </CommandBar.SecondaryCommands>
         </CommandBar>
-
-        <!--<CommandBar Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Loaded="CommandBar_Loaded"
-                    Background="DarkGreen">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="Save" Label="Save action" Click="SaveButton_Click">
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator 
-                            Modifiers="Control" 
-                            Key="S" />
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
-                <AppBarButton Icon="Remove" Label="Remove Action" Click="RemoveButton_Click"/>
-                <AppBarSeparator />
-            </CommandBar.PrimaryCommands>
-        </CommandBar>-->
 
         <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8, 8, 32" 
                   SelectionMode="None"
@@ -72,35 +43,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <!--<ScrollViewer Grid.Row="1" Grid.Column="1" Margin="8, 8, 8, 32">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0"
-                    Margin="0,8,8,4" Style="{ThemeResource BaseTextBlockStyle}">Edit params</TextBlock>
-                <TextBox x:Name="TitleBox"
-                    Grid.Column="0" Grid.Row="1"
-                    Header="Title" Margin="0,8,8,4"
-	                HorizontalAlignment="Stretch" />
-                <TextBox x:Name="CommandBox"
-                    Grid.Column="0" Grid.Row="2"
-                    Header="Command" Margin="0,8,8,4"
-	                HorizontalAlignment="Stretch" />
-                <TextBox Grid.Column="0" Grid.Row="3"
-                    Header="Params" Margin="0,8,8,4"
-	                HorizontalAlignment="Stretch" />
-                <TextBox Grid.Column="0" Grid.Row="4"
-                    Header="Icon" Margin="0,8,8,4"
-	                HorizontalAlignment="Stretch" />
-            </Grid>
-        </ScrollViewer>-->
+
     </Grid>
 </Page>

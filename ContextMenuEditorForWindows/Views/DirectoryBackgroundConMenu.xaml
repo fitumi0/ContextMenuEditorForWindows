@@ -12,11 +12,41 @@
     <!--Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
 
     <Grid>
-        <!-- TODO: ADD VIEWS SHELL\SHELLEX FOR EACH REGISTRY PAGE -->
-        <TabView 
-            x:Name="TabViewNav"
-            CloseButtonOverlayMode="OnPointerOver" TabWidthMode="Equal"
-            IsAddTabButtonVisible="False" Loaded="TabViewNav_OnLoaded"
-            Margin="0, 0, 0, 16"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <CommandBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Loaded="CommandBar_Loaded">
+            <CommandBar.PrimaryCommands>
+
+                <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="Refresh data" Click="RefreshButton_Click">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator 
+                            Key="F5" />
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarSeparator />
+            </CommandBar.PrimaryCommands>
+
+        </CommandBar>
+
+        <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8, 8, 32" 
+                  SelectionMode="None"
+                  SelectionChanged="RegistryKeys_OnSelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewItemTemplate">
+                    <StackPanel Orientation="Horizontal" Height="64" Padding="12">
+                        <ToggleSwitch Toggled="ToggleSwitch_Toggled" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
+                        <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" Margin="12,0,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
     </Grid>
 </Page>

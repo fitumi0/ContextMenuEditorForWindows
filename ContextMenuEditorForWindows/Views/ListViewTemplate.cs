@@ -20,7 +20,7 @@ public class ListViewItemTemplate
     {
         get; set;
     }
-    // add toggle state
+
     public ListViewItemTemplate(string toggle, string lvitem, bool switchIsOn)
     {
         Toggle = toggle;
