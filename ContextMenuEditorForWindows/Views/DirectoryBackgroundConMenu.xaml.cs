@@ -3,24 +3,14 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Win32;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Security.Claims;
+using System.Security.AccessControl;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,6 +23,10 @@ namespace ContextMenuEditorForWindows.Views
     public sealed partial class DirectoryBackgroundConMenu : Page
     {
         private static readonly string pattern = @"^\{[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\}$";
+        private static RegistryKey CLSID = Registry.ClassesRoot.OpenSubKey("CLSID", true);
+
+        RegistrySecurity rs = new RegistrySecurity(); // it is right string for this code
+        string currentUserStr = Environment.UserDomainName + "\\" + Environment.UserName;
 
         private List<RegistryKey> rkeys = new()
         {
@@ -53,7 +47,7 @@ namespace ContextMenuEditorForWindows.Views
             "updateencryptionsettings",
             "updateencryptionsettingswork",
             "cmd",//отключаемо
-            "powershell",//отключаемо
+            /*"powershell",*///отключаемо
             "wsl"//отключаемо
         };
         public DirectoryBackgroundConMenu()
@@ -90,10 +84,23 @@ namespace ContextMenuEditorForWindows.Views
                 if (value != null)
                 {
                     Match m = Regex.Match(value.ToString(), pattern, RegexOptions.IgnoreCase);
-                    if (m.Success) return;
+                    if (m.Success) 
+                    {
+                        {
+                            RegistryKey _rk = CLSID.OpenSubKey(value.ToString());
+                            ListViewItemTemplate lv = new ListViewItemTemplate
+                                (
+                                    _rk.GetHashCode().ToString(),
+                                    _rk.GetValue("").ToString(),
+                                    isEnable
+                                );
+                            namePaths.Add(_rk.ToString(), root.OpenSubKey(key).ToString());
+                            RegistryKeys.Items.Add(lv);
+                        }
+                    }
 
 
-                    if (value.ToString().Contains(".dll"))
+                    else if (value.ToString().Contains(".dll"))
                     {
                         string path = value.ToString().Split(",")[0];
 
@@ -150,27 +157,6 @@ namespace ContextMenuEditorForWindows.Views
 
         }
 
-        private async void RemoveButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (RegistryKeys.SelectedItem.ToString() == "removeproperties" ||
-                RegistryKeys.SelectedItem.ToString() == "UpdateEncryptionSettingsWork")
-            {
-                ContentDialog dialog = new ContentDialog();
-
-                // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-                dialog.XamlRoot = this.XamlRoot;
-                dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                dialog.Title = "Access denied!";
-                dialog.PrimaryButtonText = "Ok";
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                await dialog.ShowAsync();
-            }
-            else if (RegistryKeys.SelectedIndex != -1)
-            {
-                RegistryKeys.Items.RemoveAt(RegistryKeys.SelectedIndex);
-            }
-        }
-
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -205,28 +191,34 @@ namespace ContextMenuEditorForWindows.Views
         {
             string disableValue = "LegacyDisable";
             ToggleSwitch ts = (sender as ToggleSwitch);
-            ContentDialog dialog = new ContentDialog();
-
-            string key = namePaths[
+            try
+            {
+                string key = namePaths[
                     ((ts.Parent as StackPanel).Children[1] as TextBlock).Text
                 ].Replace(@"HKEY_CLASSES_ROOT\", "").Replace(@"\", "\\");
-            RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(key, true);
+                RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(key, true);
 
-            if (ts != null)
-            {
-                if (ts.IsOn) { _rk.DeleteValue(disableValue); }
-                else { _rk.SetValue(disableValue, "", RegistryValueKind.String); }
+                if (ts != null)
+                {
+                    //RegistrySecurity tempRS = new RegistrySecurity();
+                    //tempRS = _rk.GetAccessControl(AccessControlSections.All);
+                    //rs.AddAccessRule(new RegistryAccessRule(currentUserStr, RegistryRights.WriteKey | RegistryRights.ReadKey | RegistryRights.Delete | RegistryRights.FullControl, AccessControlType.Allow));
+
+                    if (ts.IsOn)
+                    {
+                        //_rk.SetAccessControl(rs);
+                        _rk.DeleteValue(disableValue);
+                        //_rk.SetAccessControl(tempRS);
+                    }
+                    else
+                    {
+                        //_rk.SetAccessControl(rs);
+                        _rk.SetValue(disableValue, "", RegistryValueKind.String);
+                        //_rk.SetAccessControl(tempRS);
+                    }
+                }
             }
-
-
-
-            //XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-            //dialog.XamlRoot = this.XamlRoot;
-            //dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            //dialog.Title = key.ToString();
-            //dialog.PrimaryButtonText = "Ok";
-            //dialog.DefaultButton = ContentDialogButton.Primary;
-            //await dialog.ShowAsync();
+            catch { }
         }
     }
 }

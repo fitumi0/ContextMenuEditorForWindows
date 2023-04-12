@@ -16,21 +16,21 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
-        
+
         <CommandBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Loaded="CommandBar_Loaded">
             <CommandBar.PrimaryCommands>
 
-                    <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="Refresh data" Click="RefreshButton_Click">
+                <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="Refresh data" Click="RefreshButton_Click">
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator 
                             Key="F5" />
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
                 <AppBarSeparator />
+
             </CommandBar.PrimaryCommands>
 
         </CommandBar>
-
         <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8, 8, 32" 
                   SelectionMode="None"
                   SelectionChanged="RegistryKeys_OnSelectionChanged">

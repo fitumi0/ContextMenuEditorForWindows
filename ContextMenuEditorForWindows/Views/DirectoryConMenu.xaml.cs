@@ -3,21 +3,12 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,7 +21,7 @@ namespace ContextMenuEditorForWindows.Views
     public sealed partial class DirectoryConMenu : Page
     {
         private static readonly string pattern = @"^\{[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\}$";
-
+        private static RegistryKey CLSID = Registry.ClassesRoot.OpenSubKey("CLSID", true);
         private List<RegistryKey> rkeys = new()
         {
             Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("shell", true),
@@ -87,10 +78,22 @@ namespace ContextMenuEditorForWindows.Views
                 if (value != null)
                 {
                     Match m = Regex.Match(value.ToString(), pattern, RegexOptions.IgnoreCase);
-                    if (m.Success) return;
+                    if (m.Success) 
+                    {
+                        RegistryKey _rk = CLSID.OpenSubKey(value.ToString());
+                        ListViewItemTemplate lv = new ListViewItemTemplate
+                            (
+                                _rk.GetHashCode().ToString(),
+                                _rk.ToString(),
+                                isEnable
+                            );
+                        namePaths.Add(_rk.ToString(), root.OpenSubKey(key).ToString());
+                        RegistryKeys.Items.Add(lv);
+                    }
+                    //return;
 
 
-                    if (value.ToString().Contains(".dll"))
+                    else if (value.ToString().Contains(".dll"))
                     {
                         string path = value.ToString().Split(",")[0];
 
@@ -200,7 +203,6 @@ namespace ContextMenuEditorForWindows.Views
         {
             string disableValue = "LegacyDisable";
             ToggleSwitch ts = (sender as ToggleSwitch);
-            ContentDialog dialog = new ContentDialog();
 
             string key = namePaths[
                     ((ts.Parent as StackPanel).Children[1] as TextBlock).Text
