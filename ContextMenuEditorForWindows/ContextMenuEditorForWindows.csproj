@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="CustomControls\PageControl.xaml" />
+    <None Remove="Views\CustomActions.xaml" />
     <None Remove="Views\TestPage.xaml" />
     <None Remove="Views\_DirectoryBackgroundShell.xaml" />
     <None Remove="Views\_DirectoryBackgroundShellEx.xaml" />
@@ -57,6 +58,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\CustomActions.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="Views\TestPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
