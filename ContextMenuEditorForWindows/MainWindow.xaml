@@ -21,7 +21,7 @@
 		</Grid.RowDefinitions>
 
         <Border x:Name="AppTitleBar"
-              Height="32">
+              Height="30">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal"
                 Background="{StaticResource AppCommonBackground}">
                 <Image x:Name="TitleBarIcon" Source="/Assets/EditMenu.png"
@@ -46,7 +46,7 @@
             <!--Add icons -->
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="FileConMenu" Icon="Page" Content="File" Tag="ContextMenuEditorForWindows.Views.FileConMenu" />
-                <!--<NavigationViewItem x:Name="Directory" Icon="Folder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />-->
+                <NavigationViewItem x:Name="Directory" Icon="Folder" Content="Directory" Tag="ContextMenuEditorForWindows.Views.DirectoryConMenu" />
                 <NavigationViewItem x:Name="DirectoryBackground" Icon="Folder" Content="Directory Background" Tag="ContextMenuEditorForWindows.Views.DirectoryBackgroundConMenu" />
                 <!--<NavigationViewItem x:Name="Disk" Icon="MapDrive" Content="Disc" Tag="" />-->
             </NavigationView.MenuItems>
