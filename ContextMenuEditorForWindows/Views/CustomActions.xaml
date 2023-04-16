@@ -21,37 +21,57 @@
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
-        <CommandBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <CommandBar.PrimaryCommands>
-
-                <AppBarButton x:Name="AddButton" Icon="Add" Label="Add Action" Click="AddActionShowPopUp">
-                    <AppBarButton.KeyboardAccelerators>
-                        <KeyboardAccelerator
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <Button x:Name="AddButton" Click="AddActionShowPopUp"
+                    ToolTipService.ToolTip="(Ctrl + N) Новый элемент контекстного меню"
+                     Margin="16, 8, 33, 4"
+                     Padding="12, 4">
+                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;"/>
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator
                             Modifiers="Control"
                             Key="N" />
-                    </AppBarButton.KeyboardAccelerators>
-                </AppBarButton>
-                <AppBarSeparator />
-            </CommandBar.PrimaryCommands>
+                </Button.KeyboardAccelerators>
+            </Button>
 
-        </CommandBar>
+        </StackPanel>
 
-        <ListView x:Name="ListOfCustomActions" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8, 8, 32" 
-                  SelectionMode="None" Loaded="ListOfCustomActions_Loaded">
+        <ListView x:Name="ListOfCustomActions" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8" 
+                  SelectionMode="None" Loaded="ListOfCustomActions_Loaded"
+                  ScrollViewer.HorizontalScrollMode="Enabled"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.IsHorizontalRailEnabled="True"
+                  CornerRadius="16">
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewCustomActionTemplate">
-                    <Grid Height="64" Padding="12">
+                    <Grid Height="64" BorderBrush="#202020" BorderThickness="2" CornerRadius="16" 
+                          Margin="0, 8"
+                          Padding="12, 0"
+                          MinWidth="800">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <ToggleSwitch Toggled="{x:Bind ToggledFunc}" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
-                            <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" Margin="12,0,0,0"/>
+                            <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
+                                       Margin="12, 0"/>
                         </StackPanel>
-                        <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 4" Visibility="{x:Bind ButtonVisible}">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
-                        </Button>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" >
+                            <DropDownButton Content="Directory Background">
+                                <DropDownButton.Flyout>
+                                    <MenuFlyout Placement="Bottom">
+                                        <MenuFlyoutItem Text="Directory"/>
+                                        <MenuFlyoutItem Text="File"/>
+                                        <MenuFlyoutItem Text="Drive"/>
+                                    </MenuFlyout>
+                                </DropDownButton.Flyout>
+                            </DropDownButton>
+                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 0" Padding="12, 5" Visibility="{x:Bind ButtonVisible}" Click="DeleteButton_Click">
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                            </Button>
+                        </StackPanel>
+                        
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

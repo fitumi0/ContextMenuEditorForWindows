@@ -73,6 +73,19 @@ namespace ContextMenuEditorForWindows.Views
                 );
             ListOfCustomActions.Items.Add(lv);
         }
+
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = "Удалить элемент @ElementName ? ";
+            dialog.PrimaryButtonText = "Удалить";
+            dialog.CloseButtonText = "Отмена";
+            //dialog.PrimaryButtonClick = AddButton_Click;
+            dialog.DefaultButton = ContentDialogButton.Close;
+            await dialog.ShowAsync();
+        }
     }
        
 }
