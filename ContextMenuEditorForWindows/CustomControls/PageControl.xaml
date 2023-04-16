@@ -96,7 +96,32 @@
                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8E5;"/>
                 </Button>
             </Grid>
-             <!-- Submenu -->
+            <!-- Location -->
+            <Grid   Margin="4"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Location" Margin="4" VerticalAlignment="Center"
+                           Grid.Column="0"
+                           MinWidth="100"
+                           HorizontalAlignment="Left"/>
+                <DropDownButton Content="Directory Background"
+                                Grid.Column="1" Margin="4" Padding="30, 8">
+                    <DropDownButton.Flyout>
+                        <MenuFlyout Placement="Bottom">
+                            <MenuFlyoutItem Text="Directory"/>
+                            <MenuFlyoutItem Text="Desktop Background"/>
+                            <MenuFlyoutItem Text="File"/>
+                            <MenuFlyoutItem Text="Drive"/>
+                        </MenuFlyout>
+                    </DropDownButton.Flyout>
+                </DropDownButton>
+            </Grid>
+            <!-- Submenu -->
             <Grid   Margin="4"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Stretch">
