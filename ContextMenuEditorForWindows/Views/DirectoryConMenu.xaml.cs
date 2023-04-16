@@ -20,30 +20,14 @@ namespace ContextMenuEditorForWindows.Views
     /// </summary>
     public sealed partial class DirectoryConMenu : Page
     {
-        private static readonly string pattern = @"^\{[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\}$";
-        private static RegistryKey CLSID = Registry.ClassesRoot.OpenSubKey("CLSID", true);
         private List<RegistryKey> rkeys = new()
         {
             Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("shell", true),
-            Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("shellex", true).OpenSubKey("ContextMenuHandlers", true)
+            //Registry.ClassesRoot.OpenSubKey("Directory", true).OpenSubKey("shellex", true).OpenSubKey("ContextMenuHandlers", true)
         };
 
 
         private Dictionary<string, string> namePaths = new Dictionary<string, string>();
-        // убрать некоторые значения после изучения того, что можно отключать при полных правах доступа
-        private readonly string[] hiddenKeys = {
-            "removeproperties",
-            "explore",
-            "open",
-            "opennewprocess",
-            "opennewwindow",
-            "find",
-            "updateencryptionsettings",
-            "updateencryptionsettingswork",
-            "cmd",//отключаемо
-            "powershell",//отключаемо
-            "wsl"//отключаемо
-        };
         public DirectoryConMenu()
         {
             this.InitializeComponent();
@@ -73,14 +57,14 @@ namespace ContextMenuEditorForWindows.Views
             object muiverb = root.OpenSubKey(key).GetValue("MUIVerb");
             bool isEnable = !root.OpenSubKey(key).GetValue("LegacyDisable", false).Equals("");
 
-            if (!hiddenKeys.Contains(key.ToLower()))
+            if (!CommonResources.hiddenKeys.Contains(key.ToLower()))
             {
                 if (value != null)
                 {
-                    Match m = Regex.Match(value.ToString(), pattern, RegexOptions.IgnoreCase);
+                    Match m = Regex.Match(value.ToString(), CommonResources.regPattern, RegexOptions.IgnoreCase);
                     if (m.Success) 
                     {
-                        RegistryKey _rk = CLSID.OpenSubKey(value.ToString());
+                        RegistryKey _rk = CommonResources.CLSID.OpenSubKey(value.ToString());
                         ListViewItemTemplate lv = new ListViewItemTemplate
                             (
                                 _rk.GetHashCode().ToString(),
