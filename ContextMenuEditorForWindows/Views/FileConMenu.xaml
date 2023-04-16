@@ -31,7 +31,7 @@
             </CommandBar.PrimaryCommands>
 
         </CommandBar>
-        <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8, 8, 32" 
+        <ListView x:Name="RegistryKeys" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8" 
                   SelectionMode="None"
                   SelectionChanged="RegistryKeys_OnSelectionChanged">
             <ListView.ItemTemplate>
