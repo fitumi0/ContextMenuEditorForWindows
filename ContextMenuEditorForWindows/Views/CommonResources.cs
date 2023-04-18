@@ -8,7 +8,8 @@ using Microsoft.Win32;
 namespace ContextMenuEditorForWindows.Views;
 internal class CommonResources
 {
-    public static readonly string[] hiddenKeys = {
+    public static readonly string[] hiddenKeys = 
+        {
             "removeproperties",
             "explore",
             "open",
@@ -26,5 +27,12 @@ internal class CommonResources
 
     public static RegistryKey CLSID = Registry.ClassesRoot.OpenSubKey("CLSID", true);
 
-
+    public static readonly Dictionary<byte, string> registryKeysLocations = new () 
+    {
+        { 0, @"HKEY_CLASSES_ROOT\*\shell" }, // File
+        { 1, @"HKEY_CLASSES_ROOT\Directory\shell" }, // Directory
+        { 2, @"HKEY_CLASSES_ROOT\Directory\Background\shell" }, // Directory Background
+        { 3, @"HKEY_CLASSES_ROOT\DesktopBackground\Shell" }, // Desktop
+        { 4, @"HKEY_CLASSES_ROOT\Drive\shell" }, // Drive
+    };
 }
