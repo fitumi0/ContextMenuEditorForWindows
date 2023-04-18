@@ -187,17 +187,21 @@ namespace ContextMenuEditorForWindows.Views
         {
             string disableValue = "LegacyDisable";
             ToggleSwitch ts = (sender as ToggleSwitch);
-
-            string key = namePaths[
+            try
+            {
+                string key = namePaths[
                     ((ts.Parent as StackPanel).Children[1] as TextBlock).Text
                 ].Replace(@"HKEY_CLASSES_ROOT\", "").Replace(@"\", "\\");
-            RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(key, true);
+                RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(key, true);
 
-            if (ts != null)
-            {
-                if (ts.IsOn) { _rk.DeleteValue(disableValue); }
-                else { _rk.SetValue(disableValue, "", RegistryValueKind.String); }
+                if (ts != null)
+                {
+                    if (ts.IsOn) { _rk.DeleteValue(disableValue); }
+                    else { _rk.SetValue(disableValue, "", RegistryValueKind.String); }
+                }
             }
+            catch { }
+            
 
 
 
