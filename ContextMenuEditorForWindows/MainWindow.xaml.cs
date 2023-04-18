@@ -25,7 +25,7 @@ public sealed partial class MainWindow : Window
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
         var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
 
-        appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 800, Height = 600 });
+        appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 860, Height = 600 });
         var OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
         Title = "Context Menu Editor v0.2 for Windows " + OS.ToString();
         this.InitializeComponent();
