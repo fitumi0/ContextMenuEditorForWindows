@@ -46,10 +46,9 @@
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewCustomActionTemplate">
                     <Grid Height="64" BorderBrush="#202020" BorderThickness="2" CornerRadius="16" 
                           Margin="0, 8"
-                          Padding="12, 0"
-                          MinWidth="800">
+                          Padding="12, 0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
@@ -57,17 +56,20 @@
                             <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
                                        Margin="12, 0"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" >
-                            <DropDownButton Content="Directory Background">
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <DropDownButton Content="{x:Bind DefaultMenu}"
+                                            IsEnabled="{x:Bind DropDownVisible}">
                                 <DropDownButton.Flyout>
                                     <MenuFlyout Placement="Bottom">
-                                        <MenuFlyoutItem Text="Directory"/>
-                                        <MenuFlyoutItem Text="File"/>
-                                        <MenuFlyoutItem Text="Drive"/>
+                                        <MenuFlyoutItem Text="Directory" Tag="1" Click="MenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem Text="Directory Background" Tag="2" Click="MenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem Text="Desktop" Tag="3" Click="MenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem Text="File" Tag="0" Click="MenuFlyoutItem_Click"/>
+                                        <MenuFlyoutItem Text="Drive" Tag="4" Click="MenuFlyoutItem_Click"/>
                                     </MenuFlyout>
                                 </DropDownButton.Flyout>
                             </DropDownButton>
-                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 0" Padding="12, 5" Visibility="{x:Bind ButtonVisible}" Click="DeleteButton_Click">
+                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 0" Padding="12, 5" IsEnabled="{x:Bind ButtonVisible}" Click="DeleteButton_Click">
                                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
                             </Button>
                         </StackPanel>
