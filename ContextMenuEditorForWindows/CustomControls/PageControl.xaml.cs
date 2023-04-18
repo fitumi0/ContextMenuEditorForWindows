@@ -27,5 +27,10 @@ namespace ContextMenuEditorForWindows.CustomControls
         {
             this.InitializeComponent();
         }
+
+        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            LocationButton.Content = (sender as MenuFlyoutItem).Text;
+        }
     }
 }
