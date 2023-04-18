@@ -9,15 +9,23 @@ using Microsoft.UI.Xaml.Controls;
 namespace ContextMenuEditorForWindows.Views;
 public class ListViewCustomActionTemplate
 {
-    public string Toggle
-    {
-        get; set;
-    }
     public string Text
     {
         get; set;
     }
     public string SwitchIsOn
+    {
+        get; set;
+    }
+    public string DropDownVisible
+    {
+        get; set;
+    }
+    //public string DropDownName
+    //{
+    //    get; set;
+    //}
+    public string DefaultMenu
     {
         get; set;
     }
@@ -30,12 +38,14 @@ public class ListViewCustomActionTemplate
         get; set;
     }
 
-    public ListViewCustomActionTemplate(string toggle, string lvitem, bool switchIsOn, bool btnVisible, RoutedEventHandler toggledFunc)
+    public ListViewCustomActionTemplate(string lvitem, bool switchIsOn, bool dropDownVisible,string defaultMenu, bool btnVisible, RoutedEventHandler toggledFunc)
     {
-        Toggle = toggle;
         Text = lvitem;
         SwitchIsOn = switchIsOn ? "True" : "False";
-        ButtonVisible = btnVisible ? "Visible" : "Collapsed";
+        DropDownVisible = dropDownVisible ? "True" : "False";
+        //DropDownName = toggledFunc.GetHashCode().ToString();
+        DefaultMenu = defaultMenu;
+        ButtonVisible = btnVisible ? "True" : "False";
         ToggledFunc = toggledFunc;
     }
 
