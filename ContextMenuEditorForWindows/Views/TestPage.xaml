@@ -12,6 +12,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListView x:Name="TestList"/>
+        <ListView x:Name="TestLists"/>
     </Grid>
 </Page>
