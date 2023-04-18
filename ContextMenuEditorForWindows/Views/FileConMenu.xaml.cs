@@ -68,7 +68,6 @@ namespace ContextMenuEditorForWindows.Views
                     if (m.Success)
                     {
                         {
-                            return;
                             RegistryKey _rk = CommonResources.CLSID.OpenSubKey(value.ToString());
                             ListViewItemTemplate lv = new ListViewItemTemplate
                                 (
@@ -187,6 +186,7 @@ namespace ContextMenuEditorForWindows.Views
 
             try
             {
+                // Refactor this shyte (set name to TextBlock and pass text)
                 string key = namePaths[
                     ((ts.Parent as StackPanel).Children[1] as TextBlock).Text
                 ].Replace(@"HKEY_CLASSES_ROOT\", "").Replace(@"\", "\\");
