@@ -9,7 +9,8 @@
     xmlns:consts="using:ContextMenuEditorForWindows"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Name="Root">
 
     <ScrollViewer Margin="8, 8, 8, 32">
         <StackPanel Orientation="Vertical">
@@ -29,8 +30,8 @@
                            Grid.Column="0"
                            MinWidth="100"
                            HorizontalAlignment="Left"/>
-                <TextBox HorizontalAlignment="Stretch"
-                         Grid.Column="1"
+                <TextBox Name="TitleBox" HorizontalAlignment="Stretch"
+                         Grid.Column="1" TextChanged="TextBox_TextChanged"
                         Margin="4"/>
             </Grid>
             <!-- Command -->
@@ -47,8 +48,8 @@
                            Grid.Column="0"
                            HorizontalAlignment="Left"
                            MinWidth="100"/>
-                <TextBox HorizontalAlignment="Stretch"
-                         Grid.Column="1"
+                <TextBox Name="CommandBox"  HorizontalAlignment="Stretch"
+                         Grid.Column="1" TextChanged="TextBox_TextChanged"
                     Margin="4"/>
                 <Button Grid.Column="2"
                         Margin="8, 4"
@@ -56,23 +57,6 @@
                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE756;"/>
                 </Button>
             </Grid>
-            <!-- Params -->
-            <!--<Grid   Margin="8"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Params" Margin="4" VerticalAlignment="Center"
-                           Grid.Column="0"
-                           HorizontalAlignment="Left"/>
-                <TextBox HorizontalAlignment="Stretch"
-                         Grid.Column="1"
-                    Margin="4"/>
-            </Grid>-->
             <!-- Icon -->
             <Grid   Margin="4"
                     VerticalAlignment="Center"
@@ -109,7 +93,20 @@
                            Grid.Column="0"
                            MinWidth="100"
                            HorizontalAlignment="Left"/>
-                <DropDownButton Content="Directory"
+                <ComboBox Name="LocationCB" PlaceholderText="Select location"
+                          Grid.Column="1" Margin="4" Padding="8">
+                    <!--<ComboBoxItem>Directory</ComboBoxItem>
+                    <ComboBoxItem>Directory Background</ComboBoxItem>
+                    <ComboBoxItem>Desktop</ComboBoxItem>
+                    <ComboBoxItem>File</ComboBoxItem>
+                    <ComboBoxItem>Drive</ComboBoxItem>-->
+                    <x:String>Directory</x:String>
+                    <x:String>Directory Background</x:String>
+                    <x:String>Desktop</x:String>
+                    <x:String>File</x:String>
+                    <x:String>Drive</x:String>
+                </ComboBox>
+                <!--<DropDownButton Content="Directory"
                                 Name="LocationButton"
                                 Grid.Column="1" Margin="4" Padding="8">
                     <DropDownButton.Flyout>
@@ -121,7 +118,7 @@
                             <MenuFlyoutItem Text="Drive" Tag="4" Click="MenuFlyoutItem_Click"/>
                         </MenuFlyout>
                     </DropDownButton.Flyout>
-                </DropDownButton>
+                </DropDownButton>-->
             </Grid>
             <!-- Submenu -->
             <Grid   Margin="4"
