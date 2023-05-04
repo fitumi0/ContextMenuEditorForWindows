@@ -1,13 +1,17 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
+using ContextMenuEditorForWindows.Helpers;
 using ContextMenuEditorForWindows.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using System;
+using System.IO;
 using System.Linq;
+using System.Security.Principal;
+using Windows.ApplicationModel.Core;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,6 +21,7 @@ namespace ContextMenuEditorForWindows;
 /// <summary>
 /// An empty window that can be used on its own or navigated to within a Frame.
 /// </summary>
+/// 
 public sealed partial class MainWindow : Window
 {
     public MainWindow()
@@ -27,7 +32,10 @@ public sealed partial class MainWindow : Window
 
         appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 860, Height = 600 });
         var OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
-        Title = "Context Menu Editor v0.2 for Windows " + OS.ToString();
+        var requreAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
+             .IsInRole(WindowsBuiltInRole.Administrator) ? "" : "(Required Admin Rights)";
+        
+        Title = string.Format("Context Menu Editor v0.2 for Windows {0} {1}", OS.ToString(), requreAdmin);
         this.InitializeComponent();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
@@ -41,6 +49,7 @@ public sealed partial class MainWindow : Window
                    );
 
 
+        // check folder from settings cantains moved tools file
     }
 
 
