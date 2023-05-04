@@ -28,9 +28,27 @@ namespace ContextMenuEditorForWindows.CustomControls
             this.InitializeComponent();
         }
 
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        //private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        //{
+        //    LocationButton.Content = (sender as MenuFlyoutItem).Text;
+        //}
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            LocationButton.Content = (sender as MenuFlyoutItem).Text;
+            // Get the TextBox and ContentDialog
+            var dialog = Root.Parent as ContentDialog;
+            // Validate the TextBox content
+            if (string.IsNullOrEmpty(TitleBox.Text) || string.IsNullOrEmpty(CommandBox.Text))
+            {
+                // Disable the primary button if the TextBox is empty
+                dialog.IsPrimaryButtonEnabled = false;
+            }
+            else
+            {
+                // Enable the primary button if the TextBox is not empty
+                dialog.IsPrimaryButtonEnabled = true;
+            }
         }
+
     }
 }
