@@ -11,6 +11,8 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Claims;
 using System.Security.AccessControl;
+using ContextMenuEditorForWindows.Templates;
+using ContextMenuEditorForWindows.Helpers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

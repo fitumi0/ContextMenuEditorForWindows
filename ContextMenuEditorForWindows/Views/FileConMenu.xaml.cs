@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 using ContextMenuEditorForWindows.CustomControls;
+using ContextMenuEditorForWindows.Helpers;
+using ContextMenuEditorForWindows.Templates;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Win32;
