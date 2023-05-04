@@ -5,7 +5,7 @@
     x:Class="ContextMenuEditorForWindows.Views.CustomActions"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ContextMenuEditorForWindows.Views"
+    xmlns:local="using:ContextMenuEditorForWindows.Templates"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -23,7 +23,7 @@
 
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right">
             <Button x:Name="AddButton" Click="AddActionShowPopUp"
-                    ToolTipService.ToolTip="(Ctrl + N) Новый элемент контекстного меню"
+                    ToolTipService.ToolTip="(Ctrl + N) New context menu element"
                      Margin="16, 8, 33, 4"
                      Padding="12, 4">
                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;"/>
@@ -57,10 +57,11 @@
                                        Margin="12, 0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <DropDownButton Content="{x:Bind DefaultMenu}"
+                            <DropDownButton Name="LocationButton"
+                                Content="{x:Bind DefaultMenu}"
                                             IsEnabled="{x:Bind DropDownVisible}">
                                 <DropDownButton.Flyout>
-                                    <MenuFlyout Placement="Bottom">
+                                    <MenuFlyout x:Name="LocationsList" Placement="Bottom">
                                         <MenuFlyoutItem Text="Directory" Tag="1" Click="MenuFlyoutItem_Click"/>
                                         <MenuFlyoutItem Text="Directory Background" Tag="2" Click="MenuFlyoutItem_Click"/>
                                         <MenuFlyoutItem Text="Desktop" Tag="3" Click="MenuFlyoutItem_Click"/>

@@ -2,6 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:local="using:ContextMenuEditorForWindows.Views"
+      xmlns:templates="using:ContextMenuEditorForWindows.Templates"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
@@ -35,7 +36,7 @@
                   SelectionMode="None"
                   SelectionChanged="RegistryKeys_OnSelectionChanged">
             <ListView.ItemTemplate>
-                <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewItemTemplate">
+                <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="templates:ListViewItemTemplate">
                     <StackPanel Orientation="Horizontal" Height="64" Padding="12">
                         <ToggleSwitch Toggled="ToggleSwitch_Toggled" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
                         <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" Margin="12,0,0,0"/>
