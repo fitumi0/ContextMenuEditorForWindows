@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection.Metadata;
 using ContextMenuTools;
+using ContextMenuEditorForWindows;
+
+
 
 class Program
 {
@@ -8,6 +12,7 @@ class Program
     {
         string path = Directory.Exists(args[args.Length - 1]) ? args[args.Length - 1] : ""; 
         string[] newArgs = new string[args.Length];
+        
         if (Directory.Exists(path) && path != "")
         {
             Array.Copy(args, newArgs, args.Length - 1);
@@ -16,6 +21,9 @@ class Program
         {
             Array.Copy(args, newArgs, args.Length);
         }
+        //NativeMethods(NativeMethods.GetConsoleWindow(), NativeMethods.SW_HIDE);
+        Console.WriteLine("Console Hidden");
+
         Dictionary<string, Delegate> validArgs = new Dictionary<string, Delegate>();
         validArgs["/PackFiles"] = Tools.PackFiles;
         validArgs["/?"] = Tools.Help;
