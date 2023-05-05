@@ -5,9 +5,33 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
-      Background="Transparent">
+      Background="Transparent"
+      xmlns:wuc="using:WinUICommunity">
     <StackPanel>
-        <TextBlock>Settings Page</TextBlock>
+        <TextBlock
+            x:Name="PageHeader"
+            Margin="8, 24, 36, 24"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Settings" />
+        <wuc:SettingsCard Header="CA Location" Description="Path to store a copy of custom actions file.">
+            <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+        </wuc:SettingsCard>
+        <wuc:SettingsCard Header="Settings Location" Description="Path to store a settings file.">
+            <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+        </wuc:SettingsCard>
+        <wuc:SettingsExpander Header="Test" Description="Test long stringggggg">
+            <wuc:SettingsExpander.Items>
+                <wuc:SettingsCard Header="test" Description="Abracadabra" >
+                    <ComboBox>
+                        <x:String>qwe</x:String>
+                        <x:String>asd</x:String>
+                    </ComboBox>
+                </wuc:SettingsCard>
+                <wuc:SettingsCard Header="test" Description="Abracadabra" >
+                    <TextBox Header="qwe"/>
+                </wuc:SettingsCard>
+            </wuc:SettingsExpander.Items>
+        </wuc:SettingsExpander>
 
     </StackPanel>
 </Page>
