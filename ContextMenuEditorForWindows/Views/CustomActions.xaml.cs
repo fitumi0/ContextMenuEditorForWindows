@@ -27,7 +27,7 @@ namespace ContextMenuEditorForWindows.Views
 
     public sealed partial class CustomActions : Page
     {
-        RegistryKey directory = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations["Directory"], true);
+        RegistryKey kayLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations["Directory Background"], true);
         public CustomActions()
         {
             this.InitializeComponent();
@@ -72,14 +72,14 @@ namespace ContextMenuEditorForWindows.Views
 
                             if (_rk == null)
                             {
-                                RegistryKey menuKey = directory.CreateSubKey(keyName, true);
+                                RegistryKey menuKey = kayLocation.CreateSubKey(keyName, true);
                                 menuKey.SetValue("", title);
                                 menuKey.CreateSubKey("command", true).SetValue("",
                                     command);
                             }
                             else if (!ts.IsOn)
                             {
-                                directory.DeleteSubKeyTree(keyName);
+                                kayLocation.DeleteSubKeyTree(keyName);
                             }
 
                         }
@@ -132,53 +132,29 @@ namespace ContextMenuEditorForWindows.Views
                     settings.Save(string.Format("{0}\\settings.json", path));
                 }
             }
-            
-            //var weatherForecast = new WeatherForecast
-            //{
-            //    Date = DateTime.Parse("2019-08-01"),
-            //    TemperatureCelsius = 25,
-            //    Summary = "Hot"
-            //};
-            //string dir = "AppData";
-            //string fileName = "Settings.json";
-            //string jsonString = JsonSerializer.Serialize(weatherForecast);
-            //if (!Directory.Exists(dir))
-            //{
-            //    Directory.CreateDirectory(dir);
-            //}
-            //File.WriteAllText(string.Format("{0}/{1}/{2}", AppDomain.CurrentDomain.BaseDirectory, dir, fileName), jsonString);
         }
         private async void PackToggle(object sender, RoutedEventArgs e)
         {
             string keyName = "PackWithContext";
             ToggleSwitch ts = (sender as ToggleSwitch);
-            RegistryKey _rk = directory.OpenSubKey(keyName, true);
+            RegistryKey _rk = kayLocation.OpenSubKey(keyName, true);
             if (ts != null)
             {
                 
                 if (ts.IsOn)
                 {
-                    RegistryKey packKey = directory.CreateSubKey(keyName, true);
+                    RegistryKey packKey = kayLocation.CreateSubKey(keyName, true);
+                    packKey.SetValue("", keyName);
                     packKey.CreateSubKey("command", true).SetValue("", 
                         // todo : copy tools to some folder. default value or from settings
                         "\"C:\\Applications\\AppData\\Projects\\CSharp\\ContextMenuEditorForWindows\\ContextMenuTools\\bin\\Debug\\net6.0\\ContextMenuTools.exe\" /PackFiles \"%V\"");
                 }
                 else if (!ts.IsOn)
                 {
-                    directory.DeleteSubKeyTree(keyName);
+                    kayLocation.DeleteSubKeyTree(keyName);
                 }
 
             }
-            
-            //var dialog = new ContentDialog();
-            //dialog.XamlRoot = this.XamlRoot;
-            //dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            //dialog.Title = "Новый элемент Контекстного меню";
-            //dialog.PrimaryButtonText = "Создать";
-            //dialog.CloseButtonText = "Отмена";
-            ////dialog.PrimaryButtonClick = AddButton_Click;
-            //dialog.DefaultButton = ContentDialogButton.Primary;
-            //await dialog.ShowAsync();
         }
 
         private void ListOfCustomActions_Loaded(object sender, RoutedEventArgs e)
@@ -186,8 +162,8 @@ namespace ContextMenuEditorForWindows.Views
             // add toggle with swap to old context menu if windows 11
             ListViewCustomActionTemplate lv = new ListViewCustomActionTemplate
                 (
-                    "Pack Items To Folder",
-                    directory.GetSubKeyNames().Contains("PackWithContext"), // проверка на то, есть ли в реестре уже ключ. если есть (он может быть выключен), проверяем активен ли
+                    "Pack To Folder",
+                    kayLocation.GetSubKeyNames().Contains("PackWithContext"), // проверка на то, есть ли в реестре уже ключ. если есть (он может быть выключен), проверяем активен ли
                     false,
                     "Directory Background",
                     true,
