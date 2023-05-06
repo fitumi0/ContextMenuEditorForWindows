@@ -53,24 +53,18 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <ToggleSwitch Toggled="{x:Bind ToggledFunc}" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
+                            <!--Add to assets None-icon image and if icon is none -> set source that asset-->
+                            <Image MinWidth="60" />
                             <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
                                        Margin="12, 0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <DropDownButton Name="LocationButton"
-                                Content="{x:Bind DefaultMenu}"
-                                            IsEnabled="{x:Bind DropDownVisible}">
-                                <DropDownButton.Flyout>
-                                    <MenuFlyout x:Name="LocationsList" Placement="Bottom">
-                                        <MenuFlyoutItem Text="Directory" Tag="1" Click="MenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem Text="Directory Background" Tag="2" Click="MenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem Text="Desktop" Tag="3" Click="MenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem Text="File" Tag="0" Click="MenuFlyoutItem_Click"/>
-                                        <MenuFlyoutItem Text="Drive" Tag="4" Click="MenuFlyoutItem_Click"/>
-                                    </MenuFlyout>
-                                </DropDownButton.Flyout>
-                            </DropDownButton>
-                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 0" Padding="12, 5" IsEnabled="{x:Bind ButtonVisible}" Click="DeleteButton_Click">
+                            <!--Edit-->
+                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 0, 0, 0" Padding="12, 5" IsEnabled="{x:Bind EditButtonVisible}" Click="EditButton_Click">
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE70F;"/>
+                            </Button>
+                            <!--delete-->
+                            <Button HorizontalAlignment="Right" Grid.Column="1" Margin="8, 0" Padding="12, 5" IsEnabled="{x:Bind DeleteButtonVisible}" Click="DeleteButton_Click">
                                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
                             </Button>
                         </StackPanel>
