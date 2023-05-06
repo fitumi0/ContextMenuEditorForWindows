@@ -14,10 +14,16 @@
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Settings" />
         <wuc:SettingsCard Header="CA Location" Description="Path to store a copy of custom actions file.">
-            <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+            <StackPanel Orientation="Horizontal">
+                <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+                <Button Content="Select folder" Margin="8, 0"/>
+            </StackPanel>
         </wuc:SettingsCard>
         <wuc:SettingsCard Header="Settings Location" Description="Path to store a settings file.">
-            <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+            <StackPanel Orientation="Horizontal">
+                <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+                <Button Content="Select folder" Margin="8, 0"/>
+            </StackPanel>
         </wuc:SettingsCard>
         <wuc:SettingsExpander Header="Test" Description="Test long stringggggg">
             <wuc:SettingsExpander.Items>
