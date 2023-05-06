@@ -72,12 +72,14 @@
                            Grid.Column="0"
                            MinWidth="100"
                            HorizontalAlignment="Left"/>
-                <TextBox HorizontalAlignment="Stretch"
+                <TextBox Name="IconBox"
+                         HorizontalAlignment="Stretch"
                          Grid.Column="1"
                     Margin="4"/>
                 <Button Grid.Column="2"
                         Margin="8, 4"
-                        Width="60">
+                        Width="60"
+                        Click="PickIcon">
                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8E5;"/>
                 </Button>
             </Grid>
