@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using ContextMenuTools;
-using ContextMenuEditorForWindows;
 
 
 
@@ -10,7 +10,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        string path = Directory.Exists(args[args.Length - 1]) ? args[args.Length - 1] : ""; 
+        string path = Directory.Exists(args[args.Length - 1]) && args.Length > 1? args[args.Length - 1] : ""; 
         string[] newArgs = new string[args.Length];
         
         if (Directory.Exists(path) && path != "")
@@ -20,12 +20,14 @@ class Program
         else
         {
             Array.Copy(args, newArgs, args.Length);
-        }
-        //NativeMethods(NativeMethods.GetConsoleWindow(), NativeMethods.SW_HIDE);
-        Console.WriteLine("Console Hidden");
+        }   
 
         Dictionary<string, Delegate> validArgs = new Dictionary<string, Delegate>();
         validArgs["/PackFiles"] = Tools.PackFiles;
+        validArgs["/EnableOldCM"] = Tools.EnableOldMenu;
+        validArgs["/DisableOldCM"] = Tools.DisableOldMenu;
+        validArgs["/RestartExplorer"] = Tools.RestartExplorer;
+        validArgs["/RGK"] = Tools.RegistryContainsKey;
         validArgs["/?"] = Tools.Help;
 
         foreach (string arg in newArgs)
