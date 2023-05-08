@@ -29,7 +29,11 @@ public class ListViewCustomActionTemplate
     {
         get; set;
     }
-    public string ButtonVisible
+    public string EditButtonVisible
+    {
+        get; set;
+    }
+    public string DeleteButtonVisible
     {
         get; set;
     }
@@ -38,14 +42,12 @@ public class ListViewCustomActionTemplate
         get; set;
     }
 
-    public ListViewCustomActionTemplate(string lvitem, bool switchIsOn, bool dropDownVisible, string defaultMenu, bool btnVisible, RoutedEventHandler toggledFunc)
+    public ListViewCustomActionTemplate(string lvitem, bool switchIsOn, bool editBtnVisible, bool delBtnVisible, RoutedEventHandler toggledFunc)
     {
         Text = lvitem;
         SwitchIsOn = switchIsOn ? "True" : "False";
-        DropDownVisible = dropDownVisible ? "True" : "False";
-        //DropDownName = toggledFunc.GetHashCode().ToString();
-        DefaultMenu = defaultMenu;
-        ButtonVisible = btnVisible ? "True" : "False";
+        EditButtonVisible = editBtnVisible ? "True" : "False";
+        DeleteButtonVisible = delBtnVisible ? "True" : "False";
         ToggledFunc = toggledFunc;
     }
 
