@@ -27,7 +27,7 @@ namespace ContextMenuEditorForWindows.Views
 
     public sealed partial class CustomActions : Page
     {
-        RegistryKey kayLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations["Directory Background"], true);
+        RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations["Directory Background"], true);
         public CustomActions()
         {
             this.InitializeComponent();
@@ -46,7 +46,7 @@ namespace ContextMenuEditorForWindows.Views
             
             dialog.IsPrimaryButtonEnabled = false; // validate name and command
             dialog.CloseButtonText = "Отмена";
-            dialog.PrimaryButtonClick += delegate 
+            dialog.PrimaryButtonClick += (ContentDialog sender, ContentDialogButtonClickEventArgs args) =>
             {
                 var title = (form.FindName("TitleBox") as TextBox).Text;
                 var command = (form.FindName("CommandBox") as TextBox).Text;
@@ -54,12 +54,13 @@ namespace ContextMenuEditorForWindows.Views
                 var location = CommonResources.registryKeysLocations[
                         (form.FindName("LocationCB") as ComboBox).SelectedItem.ToString()
                     ];
+                RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations[(form.FindName("LocationCB") as ComboBox).SelectedItem.ToString()], true);
+
                 ListViewCustomActionTemplate lv = new ListViewCustomActionTemplate
                 (
                     title,
                     false,
                     false,
-                    "",
                     true,
 
                     new RoutedEventHandler((sender, e) =>
@@ -72,22 +73,23 @@ namespace ContextMenuEditorForWindows.Views
 
                             if (_rk == null)
                             {
-                                RegistryKey menuKey = kayLocation.CreateSubKey(keyName, true);
+                                RegistryKey menuKey = keyLocation.CreateSubKey(keyName, true);
                                 menuKey.SetValue("", title);
                                 menuKey.CreateSubKey("command", true).SetValue("",
-                                    command);
+                                    string.Format("\"{0}\"",command));
                             }
                             else if (!ts.IsOn)
                             {
-                                kayLocation.DeleteSubKeyTree(keyName);
+                                keyLocation.DeleteSubKeyTree(keyName);
                             }
 
                         }
                     })
-                
+
                 );
                 ListOfCustomActions.Items.Add(lv);
                 // save to settings
+
 
             };
             dialog.DefaultButton = ContentDialogButton.Primary;
@@ -137,13 +139,13 @@ namespace ContextMenuEditorForWindows.Views
         {
             string keyName = "PackWithContext";
             ToggleSwitch ts = (sender as ToggleSwitch);
-            RegistryKey _rk = kayLocation.OpenSubKey(keyName, true);
+            RegistryKey _rk = keyLocation.OpenSubKey(keyName, true);
             if (ts != null)
             {
                 
                 if (ts.IsOn)
                 {
-                    RegistryKey packKey = kayLocation.CreateSubKey(keyName, true);
+                    RegistryKey packKey = keyLocation.CreateSubKey(keyName, true);
                     packKey.SetValue("", keyName);
                     packKey.CreateSubKey("command", true).SetValue("", 
                         // todo : copy tools to some folder. default value or from settings
@@ -151,7 +153,7 @@ namespace ContextMenuEditorForWindows.Views
                 }
                 else if (!ts.IsOn)
                 {
-                    kayLocation.DeleteSubKeyTree(keyName);
+                    keyLocation.DeleteSubKeyTree(keyName);
                 }
 
             }
@@ -163,10 +165,9 @@ namespace ContextMenuEditorForWindows.Views
             ListViewCustomActionTemplate lv = new ListViewCustomActionTemplate
                 (
                     "Pack To Folder",
-                    kayLocation.GetSubKeyNames().Contains("PackWithContext"), // проверка на то, есть ли в реестре уже ключ. если есть (он может быть выключен), проверяем активен ли
+                    keyLocation.GetSubKeyNames().Contains("PackWithContext"), // проверка на то, есть ли в реестре уже ключ. если есть (он может быть выключен), проверяем активен ли
                     false,
-                    "Directory Background",
-                    true,
+                    false,
                     PackToggle
                 );
             ListOfCustomActions.Items.Add(lv);
@@ -174,8 +175,7 @@ namespace ContextMenuEditorForWindows.Views
                 (
                     "Veryveryveryveryveryveryveryvery long name",
                     false,
-                    true,
-                    "Drive",
+                    false,
                     true,
                     Pass
                 );
@@ -190,6 +190,20 @@ namespace ContextMenuEditorForWindows.Views
             //(((sender as MenuFlyoutItem).Parent) as DropDownButton).Content = (sender as MenuFlyoutItem).Text;
         }
 
+        private async void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageControl form = new PageControl();
+            var dialog = new ContentDialog();
+            dialog.Content = form;
+            dialog.XamlRoot = this.XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = string.Format("Редактировать элемент {0}?", "");
+            dialog.PrimaryButtonText = "Изменить";
+            dialog.CloseButtonText = "Отмена";
+            //dialog.PrimaryButtonClick = AddButton_Click;
+            dialog.DefaultButton = ContentDialogButton.Close;
+            await dialog.ShowAsync();
+        }
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new ContentDialog();
