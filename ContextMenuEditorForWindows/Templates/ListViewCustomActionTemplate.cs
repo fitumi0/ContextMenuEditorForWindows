@@ -17,18 +17,6 @@ public class ListViewCustomActionTemplate
     {
         get; set;
     }
-    public string DropDownVisible
-    {
-        get; set;
-    }
-    //public string DropDownName
-    //{
-    //    get; set;
-    //}
-    public string DefaultMenu
-    {
-        get; set;
-    }
     public string EditButtonVisible
     {
         get; set;
