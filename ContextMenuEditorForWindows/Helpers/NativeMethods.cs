@@ -7,8 +7,6 @@ using Microsoft.UI.Xaml.Controls;
 namespace ContextMenuEditorForWindows.Helpers;
 static class NativeMethods
 {
-    const int SW_HIDE = 0;
-    const int SW_SHOW = 5;
 
     [DllImport("kernel32.dll")]
     public static extern IntPtr LoadLibrary(string dllToLoad);
@@ -59,7 +57,7 @@ static class NativeMethods
         public int FlagsEx;
     }
 
-    private static Dictionary<string, string> FILETYPES = new ()
+    private static readonly Dictionary<string, string> FILETYPES = new ()
     {
         { "txt", "Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0" },
         { "*", "All Files (*.*)\0*.*\0"},
@@ -86,6 +84,69 @@ static class NativeMethods
             // The user selected a file, do something with it
             return ofn.lpstrFile;
         }
-        return "";
+        return string.Empty;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct BROWSEINFO
+    {
+        public IntPtr hwndOwner;
+        public IntPtr pidlRoot;
+        public IntPtr pszDisplayName;
+        [MarshalAs(UnmanagedType.LPTStr)]
+        public string lpszTitle;
+        public uint ulFlags;
+        public IntPtr lpfn;
+        public IntPtr lParam;
+        public uint iImage;
+    }
+
+    [DllImport("shell32.dll")]
+    public static extern IntPtr SHBrowseForFolder(ref BROWSEINFO lpbi);
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    public static extern bool SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
+
+    public static string OpenFolderPicker()
+    {
+        IntPtr hwndOwner = IntPtr.Zero;
+        IntPtr pidlRoot = IntPtr.Zero;
+        IntPtr pszDisplayName = Marshal.AllocHGlobal(260 * Marshal.SystemDefaultCharSize);
+        IntPtr lpfn = IntPtr.Zero;
+        IntPtr lParam = IntPtr.Zero;
+        uint ulFlags = 0x00008000 | 0x00000040 | 0x00000010;
+        IntPtr lpbi = IntPtr.Zero;
+        uint iImage = 0;
+
+        try
+        {
+            BROWSEINFO bi = new BROWSEINFO();
+            bi.hwndOwner = hwndOwner;
+            bi.pidlRoot = pidlRoot;
+            bi.pszDisplayName = pszDisplayName;
+            bi.lpszTitle = "Select a settings folder\0";
+            bi.ulFlags = ulFlags;
+            bi.lpfn = lpfn;
+            bi.lParam = lParam;
+            bi.iImage = iImage;
+
+            IntPtr pidl = SHBrowseForFolder(ref bi);
+
+            if (pidl != IntPtr.Zero)
+            {
+                StringBuilder sb = new StringBuilder(260);
+                SHGetPathFromIDList(pidl, sb);
+                Marshal.FreeCoTaskMem(pidl);
+                return sb.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(pszDisplayName);
+        }
     }
 }
