@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+	<PublishSingleFile>true</PublishSingleFile>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
 </Project>
