@@ -6,26 +6,41 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       Background="Transparent"
-      xmlns:wuc="using:WinUICommunity">
-    <StackPanel>
+      xmlns:wuc="using:WinUICommunity"
+      Loaded="Page_Loaded">
+    <StackPanel Name="SettingsItems">
         <TextBlock
             x:Name="PageHeader"
             Margin="8, 24, 36, 24"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Settings" />
-        <wuc:SettingsCard Header="CA Location" Description="Path to store a copy of custom actions file.">
-            <StackPanel Orientation="Horizontal">
-                <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
-                <Button Content="Select folder" Margin="8, 0"/>
-            </StackPanel>
+        <wuc:SettingsCard Header="Classic context menu" Description="Switch New Windows 11 menu to classic." IsEnabled="{x:Bind OldCMIsEnabled}">
+            <ToggleSwitch OnContent="Classic" OffContent="New" Toggled="toggled" IsOn="{x:Bind ToggleIsOn}"></ToggleSwitch>
         </wuc:SettingsCard>
-        <wuc:SettingsCard Header="Settings Location" Description="Path to store a settings file.">
-            <StackPanel Orientation="Horizontal">
-                <TextBox HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
-                <Button Content="Select folder" Margin="8, 0"/>
-            </StackPanel>
+
+        <!--Скрывать встроенные кастомные действия-->
+        <wuc:SettingsCard Header="Hide built-in custom actions" Description="The custom actions section will not display those actions that are supplied by the publisher">
+            <!--ToDo: Make Bind-->
+            <ToggleSwitch Toggled="DisableBuiltInActions" IsOn="False"></ToggleSwitch>
         </wuc:SettingsCard>
-        <wuc:SettingsExpander Header="Test" Description="Test long stringggggg">
+        <TextBlock Text="Coming Soon"
+                   Margin="8, 16, 0, 8"/>
+        
+        <!-- TODO: Добавить переключатель для отдельного отображения Drive и Desktop локаций-->
+        <wuc:SettingsCard Header="Show additional menus" 
+                          Description="Display additional tabs for editing infrequently used context menus such as Drive and Desktop. Restart required."
+                          IsEnabled="False">
+            <!--ToDo: Make Bind-->
+            <ToggleSwitch Toggled="ShowExtraTabs" IsOn="False"></ToggleSwitch>
+        </wuc:SettingsCard>
+        
+        <!--<wuc:SettingsCard Header="Tools Location" Description="Path to store a tools files.">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Name="ToolsLocationBox" HorizontalAlignment="Stretch" PlaceholderText="Location" MaxWidth="400"></TextBox>
+                <Button Content="Select folder" Margin="8, 0" Click="ToolsLocationPick"/>
+            </StackPanel>
+        </wuc:SettingsCard>-->
+        <!--<wuc:SettingsExpander Header="Test" Description="Test long stringggggg">
             <wuc:SettingsExpander.Items>
                 <wuc:SettingsCard Header="test" Description="Abracadabra" >
                     <ComboBox>
@@ -37,7 +52,7 @@
                     <TextBox Header="qwe"/>
                 </wuc:SettingsCard>
             </wuc:SettingsExpander.Items>
-        </wuc:SettingsExpander>
+        </wuc:SettingsExpander>-->
 
     </StackPanel>
 </Page>
