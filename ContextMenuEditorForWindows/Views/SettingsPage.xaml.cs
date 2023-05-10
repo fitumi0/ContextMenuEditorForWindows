@@ -22,6 +22,7 @@ using Windows.Foundation.Collections;
 using WinUICommunity;
 using ContextMenuTools;
 using Windows.Devices.Geolocation;
+using ContextMenuEditorForWindows.Helpers;
 
 
 namespace ContextMenuEditorForWindows.Views
@@ -29,33 +30,29 @@ namespace ContextMenuEditorForWindows.Views
     public sealed partial class SettingsPage : Page
     {
         string directory = "\"C:\\Applications\\AppData\\Projects\\CSharp\\ContextMenuEditorForWindowsLatest\\ContextMenuTools\\bin\\Debug\\net6.0\\ContextMenuTools.exe\"";
-        string registryPath = "Software\\Classes\\CLSID";
+        static string registryPath = "Software\\Classes\\CLSID";
+        static int OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
+
+        public bool OldCMIsEnabled = OS == 11;
+        // for correct work, build only for your system bit depth.
+        // this will not work for x64 system when building x86 and vice versa
+        public bool ToggleIsOn = Registry.CurrentUser.OpenSubKey(registryPath).GetSubKeyNames().Contains("{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}");
+        private bool _pageLoaded = false;
+
 
         public SettingsPage()
         {
             this.InitializeComponent();
-            var OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
-            if (OS == 11)
-            {
-                SettingsCard settingsCard = new SettingsCard();
-                settingsCard.Header = "Classic context menu";
-                settingsCard.Description = "Switch New Windows 11 menu to classic.";
-
-                settingsCard.Content = new ToggleSwitch
-                {
-                    OnContent = "Classic",
-                    OffContent = "New",
-
-                };
-                (settingsCard.Content as ToggleSwitch).Toggled += toggled;
-                // Fix Toggle
-                (settingsCard.Content as ToggleSwitch).IsOn = Registry.CurrentUser.OpenSubKey(registryPath).GetSubKeyNames().Contains("{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}");
-                SettingsItems.Children.Insert(1, settingsCard);
-            }
+            
         }
 
         private void toggled(object sender, RoutedEventArgs e)
         {
+            // eliminates unnecessary command invocation when loading
+            if (!_pageLoaded)
+            {
+                return;
+            }
             ToggleSwitch ts = (sender as ToggleSwitch);
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -69,5 +66,19 @@ namespace ContextMenuEditorForWindows.Views
             P.WaitForExit();
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            _pageLoaded = true;
+        }
+
+        private void DisableBuiltInActions(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowExtraTabs(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
