@@ -15,6 +15,7 @@ using ContextMenuEditorForWindows.Templates;
 using ContextMenuEditorForWindows.Helpers;
 using Microsoft.UI.Xaml.Shapes;
 using Windows.Foundation;
+using Windows.Data.Xml.Dom;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,6 +28,7 @@ namespace ContextMenuEditorForWindows.Views
 
     public sealed partial class CustomActions : Page
     {
+        // TODO: RENAME
         RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations["Directory Background"], true);
         public CustomActions()
         {
@@ -36,6 +38,8 @@ namespace ContextMenuEditorForWindows.Views
 
         private async void AddActionShowPopUp(object sender, RoutedEventArgs e)
         {
+            AppSettings settings = new AppSettings { CustomActions = new() };
+
             PageControl form = new PageControl();
             var dialog = new ContentDialog();
             dialog.Content = form;
@@ -88,68 +92,39 @@ namespace ContextMenuEditorForWindows.Views
 
                 );
                 ListOfCustomActions.Items.Add(lv);
-                // save to settings
 
+                CustomAction customAction = new CustomAction(title, command, location);
+                if (Settings.SettingFileExists())
+                {
+                    AppSettings loadedSettings = Settings.LoadFromFile<AppSettings>();
+                    loadedSettings.CustomActions.Add(customAction);
+                    Settings.SaveToFile(loadedSettings);
+                }
+                else
+                {
+                    Settings.SaveToFile(new AppSettings { CustomActions = new() { customAction } });
+                }
+                
 
             };
             dialog.DefaultButton = ContentDialogButton.Primary;
             await dialog.ShowAsync();
         }
 
-        private void AddCustomMenuItem()
-        {
-        
-        }
-
-        private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private async void Pass(object sender, RoutedEventArgs e)
-        {
-            ToggleSwitch ts = (sender as ToggleSwitch);
-            if (ts != null)
-            {
-                string path = string.Format("{0}AppData", AppDomain.CurrentDomain.BaseDirectory);
-
-                if (!ts.IsOn)
-                {
-                    Settings set = Settings.Load(CommonResources.settingsPath);
-                    
-                    var dialog = new ContentDialog();
-                    dialog.XamlRoot = this.XamlRoot;
-                    dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                    dialog.Title = set.Path.Split("\\").Last();
-                    dialog.PrimaryButtonText = "Создать";
-                    dialog.CloseButtonText = "Отмена";
-                    //dialog.PrimaryButtonClick = AddButton_Click;
-                    dialog.DefaultButton = ContentDialogButton.Primary;
-                    await dialog.ShowAsync();
-                }
-                else
-                {
-                    var settings = new Settings { Path = path };
-
-                    // Save the settings to a JSON file
-                    settings.Save(string.Format("{0}\\settings.json", path));
-                }
-            }
-        }
-        private async void PackToggle(object sender, RoutedEventArgs e)
+        private void PackToggle(object sender, RoutedEventArgs e)
         {
             string keyName = "PackWithContext";
             ToggleSwitch ts = (sender as ToggleSwitch);
             RegistryKey _rk = keyLocation.OpenSubKey(keyName, true);
             if (ts != null)
             {
-                
+
                 if (ts.IsOn)
                 {
                     RegistryKey packKey = keyLocation.CreateSubKey(keyName, true);
                     packKey.SetValue("", keyName);
-                    packKey.CreateSubKey("command", true).SetValue("", 
-                        // todo : copy tools to some folder. default value or from settings
-                        "\"C:\\Applications\\AppData\\Projects\\CSharp\\ContextMenuEditorForWindows\\ContextMenuTools\\bin\\Debug\\net6.0\\ContextMenuTools.exe\" /PackFiles \"%V\"");
+                    packKey.CreateSubKey("command", true).SetValue("",
+                        string.Format("\"{0}ContextMenuTools.exe\" /PackFiles \"%V\"", AppDomain.CurrentDomain.BaseDirectory));
                 }
                 else if (!ts.IsOn)
                 {
@@ -161,34 +136,61 @@ namespace ContextMenuEditorForWindows.Views
 
         private void ListOfCustomActions_Loaded(object sender, RoutedEventArgs e)
         {
-            // add toggle with swap to old context menu if windows 11
             ListViewCustomActionTemplate lv = new ListViewCustomActionTemplate
                 (
                     "Pack To Folder",
-                    keyLocation.GetSubKeyNames().Contains("PackWithContext"), // проверка на то, есть ли в реестре уже ключ. если есть (он может быть выключен), проверяем активен ли
+                    keyLocation.GetSubKeyNames().Contains("PackWithContext"),
                     false,
                     false,
                     PackToggle
                 );
             ListOfCustomActions.Items.Add(lv);
-            ListViewCustomActionTemplate l1v = new ListViewCustomActionTemplate
+
+            AppSettings loadedSettings = Settings.LoadFromFile<AppSettings>();
+            foreach ( var item in loadedSettings.CustomActions)
+            {
+                var title = item.Title;
+                // TODO: LOCATIONS AS DICTIONARY
+                var location = item.Location;
+                var command = item.Command;
+                RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations[/*NOW HERE IS VALUE FROM DICT*/location], true);
+
+                ListViewCustomActionTemplate tmp = new ListViewCustomActionTemplate
                 (
-                    "Veryveryveryveryveryveryveryvery long name",
+                    title,
                     false,
                     false,
                     true,
-                    Pass
+
+                    new RoutedEventHandler((sender, e) =>
+                    {
+                        string keyName = CommonResources.GetHash(title);
+                        ToggleSwitch ts = (sender as ToggleSwitch);
+                        RegistryKey _rk = Registry.ClassesRoot.OpenSubKey(location, true).OpenSubKey(keyName, true);
+                        if (ts != null)
+                        {
+
+                            if (_rk == null)
+                            {
+                                RegistryKey menuKey = keyLocation.CreateSubKey(keyName, true);
+                                menuKey.SetValue("", title);
+                                menuKey.CreateSubKey("command", true).SetValue("",
+                                    string.Format("\"{0}\"", command));
+                            }
+                            else if (!ts.IsOn)
+                            {
+                                keyLocation.DeleteSubKeyTree(keyName);
+                            }
+
+                        }
+                    })
+
                 );
-            ListOfCustomActions.Items.Add(l1v);
-
-            // TODO: load and render all saved custom actions
+                ListOfCustomActions.Items.Add(tmp);
+            }
 
         }
 
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
-        {
-            //(((sender as MenuFlyoutItem).Parent) as DropDownButton).Content = (sender as MenuFlyoutItem).Text;
-        }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
@@ -212,7 +214,20 @@ namespace ContextMenuEditorForWindows.Views
             dialog.Title = "Удалить элемент @ElementName ? ";
             dialog.PrimaryButtonText = "Удалить";
             dialog.CloseButtonText = "Отмена";
-            //dialog.PrimaryButtonClick = AddButton_Click;
+            dialog.PrimaryButtonClick += delegate 
+            {
+                AppSettings appSettings = Settings.LoadFromFile<AppSettings>();
+                var deleteItem = (((((sender as Button).Parent as StackPanel).Parent as Grid).Children[0] as StackPanel).Children[2] as TextBlock).Text;
+                appSettings.CustomActions.Remove(appSettings.CustomActions.Find(item => item.Title == deleteItem));
+                Settings.SaveToFile(appSettings);
+                for (int i = ListOfCustomActions.Items.Count - 1; i >= 0; i--)
+                {
+                    if (ListOfCustomActions.Items[i] is ListViewCustomActionTemplate item && item.Text == deleteItem)
+                    {
+                        ListOfCustomActions.Items.RemoveAt(i);
+                    }
+                }
+            };
             dialog.DefaultButton = ContentDialogButton.Close;
             await dialog.ShowAsync();
         }
