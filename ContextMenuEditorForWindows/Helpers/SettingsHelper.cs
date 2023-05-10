@@ -7,21 +7,52 @@ using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using ContextMenuEditorForWindows.Templates;
+using Microsoft.UI.Xaml.Shapes;
+using Windows.Data.Xml.Dom;
 
 namespace ContextMenuEditorForWindows.Helpers;
+
+public class AppSettings
+{
+    public string Theme
+    {
+        get; set;
+    }
+    public bool HideBuiltInActions
+    {
+        get; set;
+    }
+    public List<CustomAction> CustomActions
+    {
+        get; set;
+    }
+}
 class Settings
 {
-    public string Path { get; set; }
-    //public string SomeItem { get; set; }
-    public void Save(string filePath)
+    private static readonly string filePath = CommonResources.settingsPath;
+
+    public static string Serialize<T>(T data)
     {
-        var json = JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        File.WriteAllText(filePath, json);
+        return JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
     }
 
-    public static Settings Load(string filePath)
+    public static T Deserialize<T>(string json)
     {
-        var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<Settings>(json);
+        return JsonConvert.DeserializeObject<T>(json);
+    }
+
+    public static void SaveToFile<T>(T data)
+    {
+        File.WriteAllText(filePath, Serialize(data));
+    }
+
+    public static T LoadFromFile<T>()
+    {
+        return Deserialize<T>(File.ReadAllText(filePath));
+    }
+    public static bool SettingFileExists()
+    {
+        return File.Exists(filePath);
     }
 }
