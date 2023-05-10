@@ -25,7 +25,7 @@ internal class CommonResources
             "wsl"//отключаемо
         };
 
-    public static string settingsPath = string.Format("{0}AppData\\\\settings.json", AppDomain.CurrentDomain.BaseDirectory);
+    public static string settingsPath = string.Format("{0}AppData\\settings.json", AppDomain.CurrentDomain.BaseDirectory);
 
     public static readonly string regPattern = @"^\{[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\}$";
 
