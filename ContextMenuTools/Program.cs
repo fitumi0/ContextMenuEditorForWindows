@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using ContextMenuTools;
-
-
+﻿using ContextMenuTools;
 
 class Program
 {
