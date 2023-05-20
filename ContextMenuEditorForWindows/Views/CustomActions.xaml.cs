@@ -291,7 +291,10 @@ namespace ContextMenuEditorForWindows.Views
 
                 string keyName = CommonResources.GetHash(deleteItem);
                 RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations[appSettings.CustomActions.Find(item => item.Title == deleteItem).Location], true);
-                keyLocation.DeleteSubKeyTree(keyName);
+                if (keyLocation.GetSubKeyNames().Contains(keyName))
+                {
+                    keyLocation.DeleteSubKeyTree(keyName);
+                }
 
                 appSettings.CustomActions.Remove(appSettings.CustomActions.Find(item => item.Title == deleteItem));
                 Settings.SaveToFile(appSettings);
