@@ -94,7 +94,8 @@
                            MinWidth="100"
                            HorizontalAlignment="Left"/>
                 <ComboBox Name="LocationCB" PlaceholderText="Select location"
-                          Grid.Column="1" Margin="4" Padding="8">
+                          Grid.Column="1" Margin="4" Padding="8"
+                          SelectedItem="Directory">
                     <x:String>Directory</x:String>
                     <x:String>Directory Background</x:String>
                     <x:String>Desktop</x:String>
@@ -118,7 +119,8 @@
                            HorizontalAlignment="Left"/>
                 <ToggleSwitch HorizontalAlignment="Stretch"
                               Grid.Column="1"
-                    Margin="4"/>
+                              Margin="4"
+                              IsEnabled="False"/>
             </Grid>
             
              <!-- Если включен тоггл, создать кнопки +\- для расширения допменю с названием и коммандой (в теории можно бесконечно каскадировать) -->        

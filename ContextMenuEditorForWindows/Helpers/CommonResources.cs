@@ -20,9 +20,9 @@ internal class CommonResources
             "find",
             "updateencryptionsettings",
             "updateencryptionsettingswork",
-            "cmd",//отключаемо
-            "powershell",//отключаемо
-            "wsl"//отключаемо
+            "cmd",
+            "powershell",
+            "wsl"
         };
 
     public static string settingsPath = string.Format("{0}AppData\\settings.json", AppDomain.CurrentDomain.BaseDirectory);

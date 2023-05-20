@@ -15,10 +15,6 @@ namespace ContextMenuEditorForWindows.Helpers;
 
 public class AppSettings
 {
-    public string Theme
-    {
-        get; set;
-    }
     public bool HideBuiltInActions
     {
         get; set;
