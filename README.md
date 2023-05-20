@@ -1,5 +1,6 @@
 # ContextMenuEditorForWindows
 Simple context menu (Right-click) editor for Win 10\11. 03.02.2023
+
 TODO: Windows 10 icons not displaying correctly. Change the icon format, or replace it with SVG
 
 ## Custom actions
