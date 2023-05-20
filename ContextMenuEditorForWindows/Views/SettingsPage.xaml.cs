@@ -29,7 +29,7 @@ namespace ContextMenuEditorForWindows.Views
 {
     public sealed partial class SettingsPage : Page
     {
-        string directory = "\"C:\\Applications\\AppData\\Projects\\CSharp\\ContextMenuEditorForWindowsLatest\\ContextMenuTools\\bin\\Debug\\net6.0\\ContextMenuTools.exe\"";
+        string directory = string.Format("\"{0}ContextMenuTools.exe\"", AppDomain.CurrentDomain.BaseDirectory);
         static string registryPath = "Software\\Classes\\CLSID";
         static int OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
 
