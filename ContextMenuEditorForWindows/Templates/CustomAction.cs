@@ -10,12 +10,14 @@ public class CustomAction
 {
     public string Title { get; set; }
     public string Command { get; set; }
+    public string Icon { get; set; }
     public string Location { get; set; }
 
-    public CustomAction(string title, string command, string location)
+    public CustomAction(string title, string command, string icon, string location)
     {
         Title = title;
         Command = command;
+        Icon = icon;
         Location = location;
     }
 }
