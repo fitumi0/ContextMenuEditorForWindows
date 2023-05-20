@@ -22,6 +22,7 @@ class Program
         validArgs["/DisableOldCM"] = Tools.DisableOldMenu;
         validArgs["/RestartExplorer"] = Tools.RestartExplorer;
         validArgs["/RGK"] = Tools.RegistryContainsKey;
+        validArgs["/ClearClip"] = Tools.ClearClip;
         validArgs["/?"] = Tools.Help;
 
         foreach (string arg in newArgs)

@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows;
 
 
 namespace ContextMenuTools;
@@ -104,5 +106,23 @@ public class Tools
 
         // Start a new explorer.exe process
         Process.Start("explorer.exe");
+    }
+
+    public static void ClearClip(string _)
+    {
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool EmptyClipboard();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool CloseClipboard();
+
+        if (OpenClipboard(IntPtr.Zero))
+        {
+            EmptyClipboard();
+        };
+        CloseClipboard();
     }
 }
