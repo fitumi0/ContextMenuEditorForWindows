@@ -18,6 +18,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
@@ -35,18 +36,26 @@
             </Button>
 
         </StackPanel>
+        <Grid Name="NothingPlaceholder" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8"
+                   Height="64"
+                   Padding="12, 0"
+                   HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock>Click to "+" to add new custom action or disable setting "Hide Built-in custom actions".</TextBlock>
+        </Grid>
 
-        <ListView x:Name="ListOfCustomActions" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8" 
-                  SelectionMode="None" Loaded="ListOfCustomActions_Loaded"
+        <ListView x:Name="ListOfCustomActions" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 8" 
+                  SelectionMode="None"
                   ScrollViewer.HorizontalScrollMode="Enabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.IsHorizontalRailEnabled="True"
-                  CornerRadius="16">
+                  CornerRadius="8">
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewCustomActionTemplate">
-                    <Grid Height="64" BorderBrush="#202020" BorderThickness="2" CornerRadius="16" 
+                    <Grid Height="64" CornerRadius="8" 
                           Margin="0, 8"
-                          Padding="12, 0">
+                          Padding="12, 0"
+                          Background="{StaticResource ListItemBackground}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
@@ -54,7 +63,7 @@
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                             <ToggleSwitch Toggled="{x:Bind ToggledFunc}" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
                             <!--Add to assets None-icon image and if icon is none -> set source that asset-->
-                            <Image MinWidth="60" />
+                            <Image Width="24" Source="{x:Bind Icon}"/>
                             <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
                                        Margin="12, 0"/>
                         </StackPanel>
