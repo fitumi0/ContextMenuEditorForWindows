@@ -46,8 +46,10 @@ namespace ContextMenuEditorForWindows.Views
         {
             if (rk != null)
             {
+                AppSettings loadedSettings = Settings.LoadFromFile<AppSettings>();
                 foreach (var key in rk.GetSubKeyNames())
                 {
+                    if (!loadedSettings.CustomActions.Any(item => CommonResources.GetHash(item.Title) == key))
                     {
                         addItem(key, rk);
                     }
