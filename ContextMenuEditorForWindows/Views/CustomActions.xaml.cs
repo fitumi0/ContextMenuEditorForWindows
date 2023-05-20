@@ -194,11 +194,10 @@ namespace ContextMenuEditorForWindows.Views
                 var command = item.Command;
                 var icon = item.Icon;
                 RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations[location], true);
-
                 ListViewCustomActionTemplate tmp = new ListViewCustomActionTemplate
                 (
                     title,
-                    Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations[location], false) == null, // todo: fix check registry contains key? 
+                    keyLocation.OpenSubKey(CommonResources.GetHash(title)) != null,
                     icon,
                     true,
                     true,
@@ -289,8 +288,17 @@ namespace ContextMenuEditorForWindows.Views
             dialog.PrimaryButtonClick += delegate 
             {
                 AppSettings appSettings = Settings.LoadFromFile<AppSettings>();
+
+                string keyName = CommonResources.GetHash(deleteItem);
+                RegistryKey keyLocation = Registry.ClassesRoot.OpenSubKey(CommonResources.registryKeysLocations[appSettings.CustomActions.Find(item => item.Title == deleteItem).Location], true);
+                keyLocation.DeleteSubKeyTree(keyName);
+
                 appSettings.CustomActions.Remove(appSettings.CustomActions.Find(item => item.Title == deleteItem));
                 Settings.SaveToFile(appSettings);
+                
+
+
+
                 for (int i = ListOfCustomActions.Items.Count - 1; i >= 0; i--)
                 {
                     if (ListOfCustomActions.Items[i] is ListViewCustomActionTemplate item && item.Text == deleteItem)
