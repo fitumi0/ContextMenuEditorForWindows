@@ -21,7 +21,7 @@
         <!--Скрывать встроенные кастомные действия-->
         <wuc:SettingsCard Header="Hide built-in custom actions" Description="The custom actions section will not display those actions that are supplied by the publisher">
             <!--ToDo: Make Bind-->
-            <ToggleSwitch Toggled="DisableBuiltInActions" IsOn="False"></ToggleSwitch>
+            <ToggleSwitch Toggled="DisableBuiltInActions" IsOn="{x:Bind BuiltInIsOn}"></ToggleSwitch>
         </wuc:SettingsCard>
         <TextBlock Text="Coming Soon"
                    Margin="8, 16, 0, 8"/>

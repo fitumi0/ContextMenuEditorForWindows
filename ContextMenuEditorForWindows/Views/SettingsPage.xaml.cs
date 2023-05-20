@@ -38,6 +38,7 @@ namespace ContextMenuEditorForWindows.Views
         // this will not work for x64 system when building x86 and vice versa
         public bool ToggleIsOn = Registry.CurrentUser.OpenSubKey(registryPath).GetSubKeyNames().Contains("{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}");
         private bool _pageLoaded = false;
+        public bool BuiltInIsOn = Settings.LoadFromFile<AppSettings>().HideBuiltInActions;
 
 
         public SettingsPage()
@@ -73,7 +74,13 @@ namespace ContextMenuEditorForWindows.Views
 
         private void DisableBuiltInActions(object sender, RoutedEventArgs e)
         {
-
+            if (!_pageLoaded)
+            {
+                return;
+            }
+            AppSettings settings = Settings.LoadFromFile<AppSettings>();
+            settings.HideBuiltInActions = !settings.HideBuiltInActions;
+            Settings.SaveToFile(settings);
         }
 
         private void ShowExtraTabs(object sender, RoutedEventArgs e)
