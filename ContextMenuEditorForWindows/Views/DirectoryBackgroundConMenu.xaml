@@ -41,9 +41,12 @@
                   SelectionChanged="RegistryKeys_OnSelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="templates:ListViewItemTemplate">
-                    <StackPanel Orientation="Horizontal" Height="64" CornerRadius="8" 
-                          Margin="0, 8"
-                          Padding="12, 0" Background="{StaticResource ListItemBackground}">
+                    <StackPanel Orientation="Horizontal" Height="64" 
+                                CornerRadius="4"
+                                BorderBrush="{StaticResource ListItemBorder}"
+                                BorderThickness="1"
+                                Margin="0, 0.5"
+                                Padding="12, 0" Background="{StaticResource ListItemBackground}">
                         <ToggleSwitch Toggled="ToggleSwitch_Toggled" IsOn="{x:Bind SwitchIsOn}"></ToggleSwitch>
                         <TextBlock Text="{x:Bind Text}" VerticalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" Margin="12,0,0,0"/>
                     </StackPanel>

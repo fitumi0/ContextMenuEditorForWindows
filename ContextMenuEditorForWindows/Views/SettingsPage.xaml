@@ -14,12 +14,14 @@
             Margin="8, 24, 36, 24"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Settings" />
-        <wuc:SettingsCard Header="Classic context menu" Description="Switch New Windows 11 menu to classic." IsEnabled="{x:Bind OldCMIsEnabled}">
+        <wuc:SettingsCard Header="Classic context menu" Description="Switch New Windows 11 menu to classic." IsEnabled="{x:Bind OldCMIsEnabled}"
+                          Margin="0,0.5">
             <ToggleSwitch OnContent="Classic" OffContent="New" Toggled="toggled" IsOn="{x:Bind ToggleIsOn}"></ToggleSwitch>
         </wuc:SettingsCard>
 
         <!--Скрывать встроенные кастомные действия-->
-        <wuc:SettingsCard Header="Hide built-in custom actions" Description="The custom actions section will not display those actions that are supplied by the publisher">
+        <wuc:SettingsCard Header="Hide built-in custom actions" Description="The custom actions section will not display those actions that are supplied by the publisher"
+                          Margin="0,0.5">
             <!--ToDo: Make Bind-->
             <ToggleSwitch Toggled="DisableBuiltInActions" IsOn="{x:Bind BuiltInIsOn}"></ToggleSwitch>
         </wuc:SettingsCard>
@@ -28,6 +30,7 @@
         
         <!-- TODO: Добавить переключатель для отдельного отображения Drive и Desktop локаций-->
         <wuc:SettingsCard Header="Show additional menus" 
+                          Margin="0,0.5"
                           Description="Display additional tabs for editing infrequently used context menus such as Drive and Desktop. Restart required."
                           IsEnabled="False">
             <!--ToDo: Make Bind-->

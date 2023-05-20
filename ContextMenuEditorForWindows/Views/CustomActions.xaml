@@ -52,8 +52,10 @@
                   CornerRadius="8">
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="xamlListViewItemtemplate" x:DataType="local:ListViewCustomActionTemplate">
-                    <Grid Height="64" CornerRadius="8" 
-                          Margin="0, 8"
+                    <Grid Height="64" CornerRadius="4"
+                                BorderBrush="{StaticResource ListItemBorder}"
+                                BorderThickness="1"
+                                Margin="0, 0.5"
                           Padding="12, 0"
                           Background="{StaticResource ListItemBackground}">
                         <Grid.ColumnDefinitions>
