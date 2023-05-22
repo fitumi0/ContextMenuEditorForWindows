@@ -26,6 +26,8 @@
                     <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+            <Color x:Key="ListItemBackground">#323232</Color>
+            <Color x:Key="ListItemBorder">#232323</Color>
             <Color x:Key="AppCommonBackground">Transparent</Color>
             <SolidColorBrush x:Key="WindowCaptionBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="WindowCaptionBackgroundDisabled" Color="Transparent"/>
