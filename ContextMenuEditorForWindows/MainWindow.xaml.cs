@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -29,13 +30,20 @@ public sealed partial class MainWindow : Window
         IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
         var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-
+        
         appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 860, Height = 600 });
         var OS = Environment.OSVersion.Version.Build >= 22000 ? 11 : Environment.OSVersion.Version.Major;
         var requreAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
              .IsInRole(WindowsBuiltInRole.Administrator) ? "" : "(Required Admin Rights)";
         
         Title = string.Format("Context Menu Editor v0.2 for Windows {0} {1}", OS.ToString(), requreAdmin);
+        if (!Settings.SettingFileExists())
+        {
+            Settings.SaveToFile(new AppSettings { HideBuiltInActions = true, CustomActions = new List<Templates.CustomAction>() });
+
+        }
+
+
         this.InitializeComponent();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
@@ -80,10 +88,5 @@ public sealed partial class MainWindow : Window
         }
 
         
-    }
-
-    private void NavView_Loaded(object sender, RoutedEventArgs e)
-    {
-
     }
 }
