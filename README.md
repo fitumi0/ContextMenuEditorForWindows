@@ -52,4 +52,17 @@ Settings are stored in JSON format. For the example above, the settings are as f
 }
 ```
 
+## Build it
+
+Using command line (requred MSBuild):
+```cmd
+git clone https://github.com/fitumi0/ContextMenuEditorForWindows.git
+cd .\ContextMenuEditorForWindows\
+msbuild .\ContextMenuEditorForWindows.csproj
+```
+Using Visual Studio:
+Open Visual Studio -> Clone a repo.
+```cmd
+https://github.com/fitumi0/ContextMenuEditorForWindows.git
+```
 
