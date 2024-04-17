@@ -65,6 +65,7 @@ https://github.com/fitumi0/ContextMenuEditorForWindows.git
 ```
 
 ## TODO: 
+- FIX: [Windows App Runtime Version 1.3 (MSIX package version > - 3000.820.152.0)](https://github.com/fitumi0/ContextMenuEditorForWindows/issues/1)
 - Windows 10 icons not displaying correctly. Change the icon format, or replace it with SVG
 - Parse icon inside exe (C:\\some.exe, 0) and render near title
 - Add parameters and guide to it (for example %1, %V etc.)
